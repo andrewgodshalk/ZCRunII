@@ -14,6 +14,11 @@ Project created from template by [Hiltmon][Simple C++ Project Structure].
 
 ## Data Locations
 
+## Author
+
+Created by Andrew Godshalk.
+[email][Andrew email] - [website][Andrew website] - [github][Andrew github]
+
 [//]: # (Reference Links)
 
 [LHC]:https://home.cern/topics/large-hadron-collider
@@ -22,3 +27,6 @@ Project created from template by [Hiltmon][Simple C++ Project Structure].
 [VHbb]:https://twiki.cern.ch/twiki/bin/view/CMS/HiggsBB
 [Ntupler]: https://github.com/andrewgodshalk/ZCNtupler
 [Simple C++ Project Structure]: http://hiltmon.com/blog/2013/07/03/a-simple-c-plus-plus-project-structure/
+[Andrew github]:https://github.com/andrewgodshalk/
+[Andrew email]:andrewgodshalk@gmail.com
+[Andrew website]:http://www.acsu.buffalo.edu/~godshalk/
