@@ -20,8 +20,8 @@ Project created from template by [Hiltmon][Simple C++ Project Structure].
 
 ## Author
 
-Created by Andrew Godshalk
-Graduate Student, SUNY at Buffalo
+Created by Andrew Godshalk  
+Graduate Student, SUNY at Buffalo  
 [email][Andrew email] - [website][Andrew website] - [github][Andrew github]
 
 [//]: # (Reference Links)
