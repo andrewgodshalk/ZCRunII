@@ -14,9 +14,14 @@ Project created from template by [Hiltmon][Simple C++ Project Structure].
 
 ## Data Locations
 
+## Links
+
+* [Buffalo Z+c Run I Analysis TWiki][Z+c RunI Twiki]
+
 ## Author
 
-Created by Andrew Godshalk.
+Created by Andrew Godshalk
+Graduate Student, SUNY at Buffalo
 [email][Andrew email] - [website][Andrew website] - [github][Andrew github]
 
 [//]: # (Reference Links)
@@ -30,3 +35,4 @@ Created by Andrew Godshalk.
 [Andrew github]:https://github.com/andrewgodshalk/
 [Andrew email]:andrewgodshalk@gmail.com
 [Andrew website]:http://www.acsu.buffalo.edu/~godshalk/
+[Z+c RunI Twiki]:https://twiki.cern.ch/twiki/bin/viewauth/CMS/ZplusHF8TeV
