@@ -8,11 +8,17 @@ Project created from template by [Hiltmon][Simple C++ Project Structure].
 
 This program is part of the [ZCRunII][ZCRunII github] project.
 
-## Installation Instructions
+## Installation & Usage
+
+```
+git clone git@github.com:andrewgodshalk/ZCRunII.git
+make
+./NtupleProcessor/bin/NtupleProcessor.exe -OPTIONS
+```
+
+Requires an installation of ROOT6. Compiler should automatically link ROOT headers with the commands used in the Makefile.
 
 ## Data Locations
-
-## Usage Instructions
 
 ## Links
 
