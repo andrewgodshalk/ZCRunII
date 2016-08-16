@@ -1,4 +1,4 @@
-# NtupleProcessor
+# [NtupleProcessor][NtupleProcessor github]
 
 Executable used to create histograms from Z+c ntuples for various analysis purposes.
 
@@ -37,3 +37,4 @@ Graduate Student, SUNY at Buffalo
 [Andrew website]:http://www.acsu.buffalo.edu/~godshalk/
 [Z+c RunI Twiki]:https://twiki.cern.ch/twiki/bin/viewauth/CMS/ZplusHF8TeV
 [ZCRunII github]:https://github.com/andrewgodshalk/ZCRunII
+[NtupleProcessor github]:https://github.com/andrewgodshalk/ZCRunII/tree/master/NtupleProcessor
