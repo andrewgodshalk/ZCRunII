@@ -4,7 +4,7 @@
 # TO DO: ----
 
 all: NtupleProcessor
-    make -f NtupleProcessor/Makefile
+	make -C NtupleProcessor
 
 clean:
-    make clean -f NtupleProcessor/Makefile
+	make clean -C NtupleProcessor
