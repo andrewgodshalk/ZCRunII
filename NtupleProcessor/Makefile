@@ -1,7 +1,7 @@
 # Makefile for ZCRunII/NtupleProcessor executable
 # Last modified 2016-08-08
 # Copied from http://hiltmon.com/blog/2013/07/03/a-simple-c-plus-plus-project-structure/
-# TO DO: ----
+# TO DO: Figure out a good way to add dependancies to utility classes.
 
 CC := g++
 SRCDIR := src
