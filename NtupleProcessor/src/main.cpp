@@ -16,7 +16,7 @@ Handles command line arguements.
 #include <boost/program_options/options_description.hpp>    // boost classes
 #include <boost/program_options/parsers.hpp>
 #include <boost/program_options/variables_map.hpp>
-//#include "../ZCLibrary/timestamp.h"                       // Project Specific classes
+#include "../../Utilities/include/TimeStamp.h"                // Project Specific classes
 #include "../include/NtupleProcessor.h"
 
 using std::cout;     using std::endl;
@@ -28,12 +28,14 @@ namespace po = boost::program_options;
 int main(int argc, char* argv[])
 {
 
+    TimeStamp beginTime;
+
   // INITIAL COMMAND LINE OUTPUT
     cout << "\n\n"
             "================================================================================\n"
             "===NtupleProcessor==============================================================\n"
-            //"  Processing Begun: " << ts_mainBegin << "\n"
-            "\n";
+            "  Processing Begun: " << beginTime.log_str() << "\n"
+         << endl;
 
   // PROCESS INPUT
 
@@ -41,10 +43,9 @@ int main(int argc, char* argv[])
     NtupleProcessor nProc;
 
   // CLOSING OUTPUT.
-    //TString ts_mainEnd = timeStamp();
+    TimeStamp endTime;
     cout << "\n"
-            //"  Completion time: " << ts_mainEnd <<      "\n"
-
+            "  Completion time: " << endTime.log_str() <<      "\n"
             "===NtupleProcessor - COMPLETE===================================================\n"
             "================================================================================\n"
          << endl;
