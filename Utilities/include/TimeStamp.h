@@ -6,7 +6,13 @@ TimeStamp class
 
 Class adapted from old timestamp functions.
 
-2015-02-01 - taken from 2013 Lorentz Angle work. Functions that spit out time stamps formatted for file names.
+TO DO:
+- Relies heavily on ROOT classes. May be worth it for future projects to rework
+  with standard libraries.
+
+2016-08-18 - Reworked into a class.
+2015-02-01 - taken from 2013 Lorentz Angle work. Functions that spit out time
+  stamps formatted for file names.
 
 
 ------------------------------------------------------------------------------*/
