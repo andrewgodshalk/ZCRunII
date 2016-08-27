@@ -1,11 +1,13 @@
 # Makefile for ZCRunII/NtupleProcessor executable
 # Last modified 2016-08-08
 # Copied from http://hiltmon.com/blog/2013/07/03/a-simple-c-plus-plus-project-structure/
-# TO DO: Figure out a good way to add dependancies to utility classes.
+# TO DO: 
+# - Figure out a good way to add dependancies to utility classes.
 
 CC := g++
 SRCDIR := src
 BUILDDIR := build
+TARGETDIR := bin
 TARGET := bin/NtupleProcessor.exe
 
 SRCEXT := cpp
@@ -22,11 +24,12 @@ $(TARGET): $(OBJECTS)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(BUILDDIR)
+	@mkdir -p $(TARGETDIR)
 	@echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 clean:
 	@echo " Cleaning..."; 
-	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
+	@echo " $(RM) -r $(BUILDDIR) $(TARGETDIR)"; $(RM) -r $(BUILDDIR) $(TARGETDIR)
 
 # Tests
 tester:

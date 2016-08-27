@@ -23,11 +23,10 @@ using std::cout;     using std::endl;
 using std::string;   using std::ifstream;
 using std::vector;
 
-namespace po = boost::program_options;
+//namespace po = boost::program_options;
 
 int main(int argc, char* argv[])
 {
-
     TimeStamp beginTime;
 
   // INITIAL COMMAND LINE OUTPUT
