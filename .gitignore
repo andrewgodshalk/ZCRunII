@@ -34,3 +34,6 @@ bin/*
 
 # Root files
 *.root
+
+# Tag file
+tags
