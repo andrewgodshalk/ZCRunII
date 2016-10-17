@@ -16,11 +16,11 @@ make
 ./NtupleProcessor/bin/NtupleProcessor.exe -OPTIONS
 ```
 
-Requires an installation of ROOT6. Compiler should automatically link ROOT headers with the commands used in the Makefile.
+Requires an installation of [ROOT 6][ROOT] and [Boost C++ Libraries][Boost]. Makefile is configured to include libraries automatically.
 
 ## Data Locations
 
-## Links
+# Links
 
 * [Buffalo Z+c Run I Analysis TWiki][Z+c RunI Twiki]
 
@@ -35,8 +35,9 @@ Graduate Student, SUNY at Buffalo
 [LHC]:https://home.cern/topics/large-hadron-collider
 [CMS]:https://home.cern/about/experiments/cms
 [ROOT]:https://root.cern.ch/
+[Boost]:http://www.boost.org/
 [VHbb]:https://twiki.cern.ch/twiki/bin/view/CMS/HiggsBB
-[Ntupler]: https://github.com/andrewgodshalk/ZCNtupler
+[Ntupler]:https://github.com/andrewgodshalk/cmssw/tree/ZC2015
 [Simple C++ Project Structure]: http://hiltmon.com/blog/2013/07/03/a-simple-c-plus-plus-project-structure/
 [Andrew github]:https://github.com/andrewgodshalk/
 [Andrew email]:andrewgodshalk@gmail.com

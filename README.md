@@ -12,6 +12,13 @@ Project created from template by [Hiltmon][Simple C++ Project Structure].
 
 ## Installation Instructions
 
+### Requirements
+
+Compilation requires:
+
+* [ROOT 6][ROOT]
+* [Boost C++ Libraries][Boost]
+
 ## Data Locations
 
 ## Links
@@ -29,6 +36,7 @@ Graduate Student, SUNY at Buffalo
 [LHC]:https://home.cern/topics/large-hadron-collider
 [CMS]:https://home.cern/about/experiments/cms
 [ROOT]:https://root.cern.ch/
+[Boost]:http://www.boost.org/
 [VHbb]:https://twiki.cern.ch/twiki/bin/view/CMS/HiggsBB
 [Ntupler]: https://github.com/andrewgodshalk/ZCNtupler
 [Simple C++ Project Structure]: http://hiltmon.com/blog/2013/07/03/a-simple-c-plus-plus-project-structure/
