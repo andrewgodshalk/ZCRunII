@@ -37,6 +37,7 @@ void TreeIterator::Init(TTree *tree)
     nEntries_   = tree->GetEntries();
     finalEntry_ = tree->GetEntries()-1;
 
+    cout << " Processing New Tree (# Entries: " << nEntries_ << ")" << endl;
   // Initialize Event Handler, adding the criteria of each HistoMaker to it's list of criteria.
   //    eHandler.mapTree(fChain);
 }
@@ -45,7 +46,7 @@ void TreeIterator::Init(TTree *tree)
 Bool_t TreeIterator::Notify()
 {
   // TO DO - Set up to work w/ TChain.
-    Init(fChain);
+  //  Init(fChain);
     return kTRUE;
 }
 
@@ -53,13 +54,13 @@ Bool_t TreeIterator::Notify()
 Bool_t TreeIterator::Process(Long64_t entry)
 {
   // Load current entry
-    fChain->GetEntry(entry);
+    fChain->GetTree()->GetEntry(entry);
     nEntriesProcessed_++;
     if(entry%100000 == 0 || (unsigned long) entry==finalEntry_) cout << "  #" << entry << endl;
 
   // TEST OUTPUT - print entry number, returning after 20 entries.
-    cout << setw(4) << entry;
-    if(entry%20==0) cout << endl;
+//    cout << setw(4) << entry;
+//    if(entry%20==0) cout << endl;
 
   // Evaluate the criteria for this entry
     //eHandler.evalCriteria();
