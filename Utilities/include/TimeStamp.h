@@ -35,12 +35,12 @@ class TimeStamp
     char dDlm_;   // Delimeter between date numbers,
     char bDlm_;   //   between date and time,
     char tDlm_;   //   and between the numbers in the time.
-    int year_, month_, day_, hour_, min_, sec_;
+    int  year_, month_, day_, hour_, min_, sec_;
 };
 
 // Outputs a timestamp string suitable for text logs.
 //   Deliminated by the input values. Default example: 2016-08-17 01:56:24
-std::string TimeStamp::log_str()
+inline std::string TimeStamp::log_str()
 {
     char str[20];   // Length of string shown in example above, plus one character for termination.
     std::snprintf(str, 20, "%04i%c%02i%c%02i%c%02i%c%02i%c%02i", year_, dDlm_, month_, dDlm_, day_, bDlm_, hour_, tDlm_, min_, tDlm_, sec_);
@@ -48,7 +48,7 @@ std::string TimeStamp::log_str()
 }
 
 // Spits out date and time, by default in YYYY-MM-DD_HHMMSS, for use in filenames
-std::string TimeStamp::fn_str()
+inline std::string TimeStamp::fn_str()
 {
     char str[18];   // Length of string shown in example above, plus one character for termination.
     std::snprintf(str, 18, "%04i-%02i-%02i_%02i%02i%02i", year_, month_, day_, hour_, min_, sec_);
@@ -56,7 +56,7 @@ std::string TimeStamp::fn_str()
 }
 
 // Set a new date and time
-void TimeStamp::update()
+inline void TimeStamp::update()
 {
     std::time_t t = std::time(nullptr);
     now_   = std::localtime(&t);

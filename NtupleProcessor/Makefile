@@ -1,22 +1,25 @@
 # Makefile for ZCRunII/NtupleProcessor executable
-# Last modified 2016-08-08
+# Last modified 2016-10-14
 # Copied from http://hiltmon.com/blog/2013/07/03/a-simple-c-plus-plus-project-structure/
-# TO DO: 
+# TO DO:
 # - Figure out a good way to add dependancies to utility classes.
+# - Figure out best way to include header files in dependancies.
 
 CC := g++
 SRCDIR := src
+HDRDIR := include
 BUILDDIR := build
 TARGETDIR := bin
 TARGET := bin/NtupleProcessor.exe
 
 SRCEXT := cpp
+HDREXT := h
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 ROOTFLAGS=`root-config --cflags --glibs`
-LIB := -lboost_program_options
-CFLAGS := -g -Wall $(ROOTFLAGS)
-INC := -I include
+BOOSTLIB := -lboost_program_options
+CFLAGS := -g -Wall $(BOOSTLIB) $(ROOTFLAGS)
+INC := -I $(HDRDIR)
 
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."
@@ -28,7 +31,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 clean:
-	@echo " Cleaning..."; 
+	@echo " Cleaning...";
 	@echo " $(RM) -r $(BUILDDIR) $(TARGETDIR)"; $(RM) -r $(BUILDDIR) $(TARGETDIR)
 
 # Tests
