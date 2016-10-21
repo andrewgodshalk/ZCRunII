@@ -4,9 +4,12 @@ NtupleProcessor.cpp
  Modified: 2016-10-17  godshalk
 ------------------------------------------------------------------------------*/
 
+// Standard Libraries
 #include <iostream>
+// Submodules
+#include "spdlog/spdlog.h"
 // Project Specific classes
-#include "../include/NtupleProcessor.h"
+#include "NtupleProcessor.h"
 
 using std::cout;   using std::endl;
 using std::string;
@@ -14,7 +17,28 @@ using std::string;
 typedef unsigned long counter;
 
 int main(int argc, char* argv[])
-{ // SET UP NTUPLEPROCESSOR
+{  // Set up logging
+    try
+    {
+         //Multithreaded console logger(with color support)
+        auto console = spdlog::stdout_color_mt("console");
+        console->info("Welcome to spdlog!") ;
+        console->info("An info message example {} ..", 1);
+
+        // Create basic file logger (not rotated)
+        auto my_logger = spdlog::basic_logger_mt("basic_logger", "logs/basic.txt");
+        my_logger->info("Some log message");
+
+        // create a file rotating logger with 5mb size max and 3 rotated files
+        auto file_logger = spdlog::rotating_logger_mt("file_logger", "myfilename", 1024 * 1024 * 5, 3);
+        file_logger->info("Hello spdlog {} {} {}", 1, 2, "three");
+    }
+    catch (const spdlog::spdlog_ex& ex)
+    {
+        std::cout << "Log failed: " << ex.what() << std::endl;
+    }
+
+   // SET UP NTUPLEPROCESSOR
     NtupleProcessor nProc (argc, argv);
     return 0;
 }

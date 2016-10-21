@@ -19,7 +19,7 @@ OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 ROOTFLAGS=`root-config --cflags --glibs`
 BOOSTLIB := -lboost_program_options
 CFLAGS := -g -Wall $(BOOSTLIB) $(ROOTFLAGS)
-INC := -I $(HDRDIR)
+INC := -I $(HDRDIR) -I ../spdlog/include/ -I ../Utilities/include/
 
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."

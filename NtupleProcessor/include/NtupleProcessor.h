@@ -19,7 +19,7 @@
 #include <TChain.h>
 // Project Specific classes
 #include "TreeIterator.h"
-#include "../../Utilities/include/TimeStamp.h"
+#include "TimeStamp.h"
 
 typedef unsigned long counter;
 
