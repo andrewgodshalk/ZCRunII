@@ -25,7 +25,7 @@ $(TARGET): $(OBJECTS)
 	@echo " Linking..."
 	@echo " $(CC) $^ -o $(TARGET) $(LIB) $(ROOTFLAGS)"; $(CC) $^ -o $(TARGET) $(LIB) $(ROOTFLAGS)
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
+$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT) $(HDRDIR)/%.$(HDREXT)
 	@mkdir -p $(BUILDDIR)
 	@mkdir -p $(TARGETDIR)
 	@echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<

@@ -10,6 +10,7 @@
  Takes input variables (datasets, configurations, etc) and sets up the
  appropriate classes to handle each portion of the analysis process.
 
+ 2016-10-20 - Moved main function into source for this class.
  2016-10-19 - Started work on adding logging.
 ------------------------------------------------------------------------------*/
 #include <string>

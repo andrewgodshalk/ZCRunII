@@ -13,6 +13,12 @@ using std::string;
 
 typedef unsigned long counter;
 
+int main(int argc, char* argv[])
+{ // SET UP NTUPLEPROCESSOR
+    NtupleProcessor nProc (argc, argv);
+    return 0;
+}
+
 NtupleProcessor::NtupleProcessor(int argc, char* argv[])
   : ntupleFileNames_(), tIter_(), eventsToProcess_(-1), o_location_("")
 {
