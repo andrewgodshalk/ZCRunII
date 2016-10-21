@@ -2,8 +2,10 @@
 TreeIterator.cpp
 
  Created : 2015-05-14  godshalk
- Modified: 2016-10-16  godshalk
+ Modified: 2016-10-19  godshalk
 
+
+ 2016-10-19 -
  2016-10-16 - Transferred, slightly modified to work with new version of NtupleProcessor
 
 */
@@ -29,6 +31,7 @@ void TreeIterator::SlaveBegin(TTree * /*tree*/)
 void TreeIterator::Init(TTree *tree)
 {
   // TO DO: Set up to work with TChain.
+  //   Seems to call at beginning of chain only, not at beginning of individual trees.
   // Initialize the current tree.
     if (!tree) return;
     fChain = tree;              // Commented, don't think I need to access tree information outside of this function.
@@ -38,8 +41,11 @@ void TreeIterator::Init(TTree *tree)
     finalEntry_ = tree->GetEntries()-1;
 
     cout << " Processing New Tree (# Entries: " << nEntries_ << ")" << endl;
+
   // Initialize Event Handler, adding the criteria of each HistoMaker to it's list of criteria.
-  //    eHandler.mapTree(fChain);
+    //eHandler.mapTree(fChain);
+  // TEST
+    fChain->SetBranchAddress("Vtype", &m_Vtype_);
 }
 
 
@@ -58,17 +64,13 @@ Bool_t TreeIterator::Process(Long64_t entry)
     nEntriesProcessed_++;
     if(entry%100000 == 0 || (unsigned long) entry==finalEntry_) cout << "  #" << entry << endl;
 
-  // TEST OUTPUT - print entry number, returning after 20 entries.
-//    cout << setw(4) << entry;
-//    if(entry%20==0) cout << endl;
+  // Evaluate selection profiles.
+  // TEST
+    // if(m_Vtype_==0) cout << "    Entry " << entry << " == Zuu" << endl;
 
-  // Evaluate the criteria for this entry
-    //eHandler.evalCriteria();
+  // Call each HistogramMakers
 
-  // Call each of the HistogramMakers on this entry.
-    //for(auto &hPair : hExtractors) hPair.second->fillHistos();
-
-return true;
+    return true;
 }
 
 void TreeIterator::SlaveTerminate(){}

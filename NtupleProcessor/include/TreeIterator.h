@@ -5,12 +5,14 @@
    TreeIterator
 
  Created : 2015-05-14  godshalk
- Modified: 2016-10-17  godshalk
+ Modified: 2016-10-19  godshalk
 
  Class inheritted from TSelector (from ROOT libraries). TSelector implementation
  documentation can be found at https://root.cern.ch/developing-tselector.
 
  Created to run over (chains of) Z+c Ntuple trees.
+
+ 2016-10-19 - Started adding loggin functions.
 
 ------------------------------------------------------------------------------*/
 
@@ -59,6 +61,9 @@ public:
     counter nEntries_;            // Total number of entries in chain
     counter finalEntry_;          // Index of last entry
     counter nEntriesProcessed_;   // Total number of events processed from chain
+
+  // TEST VARIABLES
+    float m_Vtype_ = 0;
 
 };
 
