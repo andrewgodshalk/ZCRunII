@@ -28,6 +28,7 @@
 *.app
 
 # Specific Directories
+logs
 build
 lib/*
 bin/*

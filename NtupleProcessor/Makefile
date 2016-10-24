@@ -23,7 +23,7 @@ INC := -I $(HDRDIR) -I ../spdlog/include/ -I ../Utilities/include/
 
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."
-	@echo " $(CC) $^ -o $(TARGET) $(LIB) $(ROOTFLAGS)"; $(CC) $^ -o $(TARGET) $(LIB) $(ROOTFLAGS)
+	@echo " $(CC) $^ -o $(TARGET) $(BOOSTLIB) $(ROOTFLAGS)"; $(CC) $^ -o $(TARGET) $(BOOSTLIB) $(ROOTFLAGS)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT) $(HDRDIR)/%.$(HDREXT)
 	@mkdir -p $(BUILDDIR)

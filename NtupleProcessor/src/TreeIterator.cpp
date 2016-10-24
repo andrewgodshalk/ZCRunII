@@ -10,12 +10,20 @@ TreeIterator.cpp
 
 */
 
-#include <iomanip>
 #include <iostream>
-#include "../include/TreeIterator.h"
+#include "NtupleProcessor.h"
+#include "TreeIterator.h"
 
-using std::cout;  using std::endl;   using std::setw;   using std::string;
+using std::string;
 
+TreeIterator::TreeIterator()
+  : fChain(0), nEntries_(0), finalEntry_(0), nEntriesProcessed_(0)
+{
+  // Set up logger
+    logger_ = spdlog::get("NtupleProcessor_log");
+    if(!logger_) std::cerr << "ERROR: LOGGER NOT FOUND." << std::endl;
+    logPrefix_ = (logger_->level() == spdlog::level::trace ? "[TI]  " : "  ");
+}
 
 void TreeIterator::Begin(TTree * /*tree*/){}
 
@@ -40,7 +48,8 @@ void TreeIterator::Init(TTree *tree)
     nEntries_   = tree->GetEntries();
     finalEntry_ = tree->GetEntries()-1;
 
-    cout << " Processing New Tree (# Entries: " << nEntries_ << ")" << endl;
+    //cout << " Processing New Tree (# Entries: " << nEntries_ << ")" << endl;
+    logger_->info("{} Processing New Tree (# Entries: {})", logPrefix_, nEntries_);
 
   // Initialize Event Handler, adding the criteria of each HistoMaker to it's list of criteria.
     //eHandler.mapTree(fChain);
@@ -51,8 +60,8 @@ void TreeIterator::Init(TTree *tree)
 
 Bool_t TreeIterator::Notify()
 {
-  // TO DO - Set up to work w/ TChain.
   //  Init(fChain);
+  // TO DO - Set up to work w/ TChain.
     return kTRUE;
 }
 
@@ -62,7 +71,7 @@ Bool_t TreeIterator::Process(Long64_t entry)
   // Load current entry
     fChain->GetTree()->GetEntry(entry);
     nEntriesProcessed_++;
-    if(entry%100000 == 0 || (unsigned long) entry==finalEntry_) cout << "  #" << entry << endl;
+    if(entry%100000 == 0 || (unsigned long) entry==finalEntry_) logger_->info("{} #{}", logPrefix_, entry);
 
   // Evaluate selection profiles.
   // TEST

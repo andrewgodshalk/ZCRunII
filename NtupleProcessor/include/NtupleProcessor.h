@@ -17,6 +17,8 @@
 #include <vector>
 // ROOT Libraries
 #include <TChain.h>
+// Submodules
+#include "spdlog/spdlog.h"
 // Project Specific classes
 #include "TreeIterator.h"
 #include "TimeStamp.h"
@@ -28,16 +30,27 @@ class NtupleProcessor
   public:
     NtupleProcessor(int argc, char* argv[]);  // Primary constructor.
    ~NtupleProcessor(){}
+    //static constexpr char loggerName_[] = "NtupleProcessor_log";
+      // TO DO: Figure out how to get this to work across classes.
 
   private:
+    // Helper methods
+    void initializeLogging();
+    void processCommandLineInput(int, char*[]);
+
+    // Command Line Input
+    bool logQuiet_;
+    bool logDebug_;
+
     // File Information
     std::vector<std::string> ntupleFileNames_;
     TChain* ntuples_;
-
-    TreeIterator tIter_;
+    TreeIterator* tIter_;
 
     // Processing information
-    counter   eventsToProcess_;
+    std::shared_ptr<spdlog::logger> logger_;
+    std::string logPrefix_;
+    counter eventsToProcess_;
     TimeStamp beginTime_;
     TimeStamp endTime_;
     std::string o_location_;  // Included to specify running on LPC or on personal computer.

@@ -16,6 +16,11 @@
 
 ------------------------------------------------------------------------------*/
 
+// Standard Libraries
+#include <memory>
+// Submodules
+#include "spdlog/spdlog.h"
+// Root Classes
 #include <TChain.h>
 #include <TSelector.h>
 
@@ -24,7 +29,7 @@ typedef unsigned long counter;
 class TreeIterator : public TSelector
 {
 public:
-    TreeIterator() : fChain(0), nEntries_(0), finalEntry_(0), nEntriesProcessed_(0) {}
+    TreeIterator();
     virtual ~TreeIterator(){}
 
   // Overloaded TSelector Functions
@@ -56,6 +61,10 @@ public:
 
   // TTree
     TTree *fChain;
+
+  // Logging
+    std::shared_ptr<spdlog::logger> logger_;
+    std::string logPrefix_;
 
   // Internal counters
     counter nEntries_;            // Total number of entries in chain
