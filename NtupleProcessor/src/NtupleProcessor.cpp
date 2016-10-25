@@ -39,12 +39,12 @@ int main(int argc, char* argv[])
 }
 
 NtupleProcessor::NtupleProcessor(int argc, char* argv[])
-  : logQuiet_(false), logDebug_(false), procLocation_(""), eventsToProcess_(0), options_(""), ntupleFileNames_()
+  : logQuiet_(false), logDebug_(false), procLocation_(""), eventsToProcess_(0), options_(""), ntupleFileNames_(), logger_("NtupleProcessor_log", "[NP] ")
 { // Class initialization
     beginTime_.update();
     if(!processCommandLineInput(argc, argv)) throw("help");
-    initializeLogging();
-    logger_->debug("{} NtupleProcessor Created.", logPrefix_);
+    //initializeLogging();
+    logger_.debug("NtupleProcessor Created.");
     tIter_ = new TreeIterator();
 
   // Handle file/tree input. (TEMPORARY: will eventually be replaced w/ input options.)
@@ -62,8 +62,8 @@ NtupleProcessor::NtupleProcessor(int argc, char* argv[])
     for(string fn : ntupleFileNames_)
       ntuples_->Add(fn.c_str());
 
-    logger_->info("{} NtupleProcessor initizated {}"  , logPrefix_, beginTime_.log_str());
-    if(eventsToProcess_>0) logger_->info("{} Number of events to process: {}", logPrefix_, eventsToProcess_);
+    logger_.info("NtupleProcessor initizated {}", beginTime_.log_str());
+    if(eventsToProcess_>0) logger_.info("Number of events to process: {}", eventsToProcess_);
 
   // Process the tree.
     if(eventsToProcess_>0) ntuples_->Process(tIter_, "", eventsToProcess_);
@@ -71,65 +71,11 @@ NtupleProcessor::NtupleProcessor(int argc, char* argv[])
 
   // CLOSING OUTPUT.
     endTime_.update();
-    logger_->info("{} NtupleProcessor complete {}", logPrefix_, endTime_.log_str());
+    logger_.info("NtupleProcessor complete {}", endTime_.log_str());
 
   // Clean up
     delete ntuples_;
 
-}
-
-void NtupleProcessor::initializeLogging()
-{ // Set up logging
-  // TO DO: Add directory creation? Boost libraries not loaded, so would need to do with unix-based commands.
-
-  // Set up file name and location.
-    string logDir = "logs/";
-    string logFilename = "NtupleProcessor_";
-    logFilename += beginTime_.fn_str() + ".log";
-    logPrefix_ = (logDebug_ ? "[NP]" : "");
-
-  // Log format
-    string logFormat = "%v";
-    if(logDebug_) logFormat = "[%Y-%m-%d %H:%M:%S.%e|%l]%v";
-
-    try
-    { // Create sinks (outputs) for loggers
-        vector<spdlog::sink_ptr> sinks;
-        sinks.push_back(std::make_shared<spdlog::sinks::simple_file_sink_st>((logDir+logFilename).c_str()));
-        sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_st>());
-        sinks.push_back(std::make_shared<spdlog::sinks::stderr_sink_st>());
-
-      // Create logger, to be accessed globally from all classes.
-        logger_ = std::make_shared<spdlog::logger>("NtupleProcessor_log", begin(sinks), end(sinks));
-
-      // Set logger and sink levels.
-        // Normal mode - file, stdout at info, stderr at err
-        // Debug -> file at trace, stdout at debug, add time to log message
-        // Quiet -> silences stdout
-        logger_ ->set_level(spdlog::level::info);
-        sinks[0]->set_level(spdlog::level::info);
-        sinks[1]->set_level(spdlog::level::info);
-        sinks[2]->set_level(spdlog::level::err );
-        if(logDebug_)
-        {
-            logger_ ->set_level(spdlog::level::trace);
-            sinks[0]->set_level(spdlog::level::trace);
-            sinks[1]->set_level(spdlog::level::debug);
-        }
-        if(logQuiet_)
-            sinks[1]->set_level(spdlog::level::err);
-
-      // Set log format and register logger globally
-        logger_->set_pattern(logFormat.c_str());
-        spdlog::register_logger(logger_);
-
-      // Set logger to asynchronous mode
-        spdlog::set_async_mode(4096);
-    }
-    catch (const spdlog::spdlog_ex& ex)
-    {
-        cout << "Log failed: " << ex.what() << endl;
-    }
 }
 
 bool NtupleProcessor::processCommandLineInput(int argc, char* argv[])
@@ -158,5 +104,11 @@ bool NtupleProcessor::processCommandLineInput(int argc, char* argv[])
     logQuiet_         = cmdInput.count("quiet");
     eventsToProcess_  = ( cmdInput.count("maxevents") ? cmdInput["maxevents"].as<int>() : -1);
 
+    if(logDebug_)
+    {   logger_.setFormat("[%Y-%m-%d %H:%M:%S.%e|%l]%v");
+        logger_.setDebug(true);
+    }
+    if(logQuiet_)
+        logger_.setQuiet(true);
     return true;
 }

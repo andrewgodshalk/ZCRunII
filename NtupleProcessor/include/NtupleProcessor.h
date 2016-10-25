@@ -20,8 +20,9 @@
 // ROOT Libraries
 #include <TChain.h>
 // Submodules
-#include "spdlog/spdlog.h"
+//#include "spdlog/spdlog.h"
 // Project Specific classes
+#include "Logger.h"
 #include "TreeIterator.h"
 #include "TimeStamp.h"
 
@@ -37,7 +38,6 @@ class NtupleProcessor
 
   private:
     // Helper methods
-    void initializeLogging();
     bool processCommandLineInput(int, char*[]);
 
     // Command Line Input
@@ -53,8 +53,7 @@ class NtupleProcessor
     TreeIterator* tIter_;
 
     // Processing information
-    std::shared_ptr<spdlog::logger> logger_;
-    std::string logPrefix_;
+    Logger logger_;
     TimeStamp beginTime_;
     TimeStamp endTime_;
 };

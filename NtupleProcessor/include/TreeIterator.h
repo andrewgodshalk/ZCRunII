@@ -24,8 +24,9 @@
 // Root Classes
 #include <TChain.h>
 #include <TSelector.h>
-// Project Specific
-#include <EventHandler.h>
+// Project Specific classes
+#include "EventHandler.h"
+#include "Logger.h"
 
 typedef unsigned long counter;
 
@@ -68,8 +69,7 @@ class TreeIterator : public TSelector
     EventHandler* evt;
 
   // Logging
-    std::shared_ptr<spdlog::logger> logger_;
-    std::string logPrefix_;
+    Logger logger_;
 
   // Internal counters
     counter nEntries_;            // Total number of entries in chain

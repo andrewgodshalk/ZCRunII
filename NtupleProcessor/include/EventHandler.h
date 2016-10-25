@@ -17,6 +17,8 @@
 // Submodules
 #include "spdlog/spdlog.h"
 // Root Classes
+// Project Specific classes
+#include "Logger.h"
 
 class EventHandler
 {
@@ -28,8 +30,7 @@ class EventHandler
 
   private:
   // Logging
-    std::shared_ptr<spdlog::logger> logger_;
-    std::string logPrefix_;
+    Logger logger_;
 };
 
 
