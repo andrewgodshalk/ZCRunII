@@ -5,13 +5,14 @@
    TreeIterator
 
  Created : 2015-05-14  godshalk
- Modified: 2016-10-19  godshalk
+ Modified: 2016-10-24  godshalk
 
  Class inheritted from TSelector (from ROOT libraries). TSelector implementation
  documentation can be found at https://root.cern.ch/developing-tselector.
 
  Created to run over (chains of) Z+c Ntuple trees.
 
+ 2016-10-24 - Integrated global logger. Moved constructor into source.
  2016-10-19 - Started adding loggin functions.
 
 ------------------------------------------------------------------------------*/

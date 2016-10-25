@@ -2,10 +2,10 @@
 TreeIterator.cpp
 
  Created : 2015-05-14  godshalk
- Modified: 2016-10-19  godshalk
+ Modified: 2016-10-24  godshalk
 
 
- 2016-10-19 -
+ 2016-10-24 - Moved constructor into source.
  2016-10-16 - Transferred, slightly modified to work with new version of NtupleProcessor
 
 */
@@ -71,13 +71,14 @@ Bool_t TreeIterator::Process(Long64_t entry)
   // Load current entry
     fChain->GetTree()->GetEntry(entry);
     nEntriesProcessed_++;
-    if(entry%100000 == 0 || (unsigned long) entry==finalEntry_) logger_->info("{} #{}", logPrefix_, entry);
+    if(nEntriesProcessed_%100000 == 0 || nEntriesProcessed_==finalEntry_) logger_->info("{} #{}", logPrefix_, nEntriesProcessed_);
 
   // Evaluate selection profiles.
-  // TEST
-    // if(m_Vtype_==0) cout << "    Entry " << entry << " == Zuu" << endl;
 
   // Call each HistogramMakers
+
+  // TEST
+     //if(m_Vtype_==0) cout << "    Entry " << entry << " == Zuu" << endl;
 
     return true;
 }

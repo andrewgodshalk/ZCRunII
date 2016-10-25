@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 NtupleProcessor.cpp
  Created : 2015-09-14  godshalk
- Modified: 2016-10-17  godshalk
+ Modified: 2016-10-24  godshalk
 ------------------------------------------------------------------------------*/
 
 // Standard Libraries
@@ -12,36 +12,43 @@ NtupleProcessor.cpp
 #include <sys/stat.h>
 #include <unistd.h>
 // Boost Libraries
-// #include <boost/program_options/options_description.hpp>
-// #include <boost/program_options/parsers.hpp>
-// #include <boost/program_options/variables_map.hpp>
+#include <boost/program_options/options_description.hpp>
+#include <boost/program_options/parsers.hpp>
+#include <boost/program_options/variables_map.hpp>
 // Project Specific classes
 #include "NtupleProcessor.h"
 #include "TimeStamp.h"
 
+using std::cout;     using std::endl;
 using std::string;   using std::vector;
 
 typedef unsigned long counter;
+namespace po = boost::program_options;
 
 // MAIN() - Used only to pass on input to NtupleProcessor class.
 int main(int argc, char* argv[])
 { // Set up NtupleProcessor
-    NtupleProcessor nProc (argc, argv);
+  // Try/catch set up for the sole pupose of catching false return on
+    try { NtupleProcessor nProc (argc, argv); }
+    catch(const char* msg)
+    {
+        if(string(msg) != "help") std::cerr << msg << endl;
+        return 1;
+    }
     return 0;
 }
 
 NtupleProcessor::NtupleProcessor(int argc, char* argv[])
-  : logQuiet_(false), logDebug_(false), ntupleFileNames_(), eventsToProcess_(-1), o_location_("")
-{
-  // Class initialization
+  : logQuiet_(false), logDebug_(false), procLocation_(""), eventsToProcess_(0), options_(""), ntupleFileNames_()
+{ // Class initialization
     beginTime_.update();
-    processCommandLineInput(argc, argv);
+    if(!processCommandLineInput(argc, argv)) throw("help");
     initializeLogging();
     tIter_ = new TreeIterator();
 
   // Handle file/tree input. (TEMPORARY: will eventually be replaced w/ input options.)
-    if(argc>1) o_location_ = argv[1];
-    if(o_location_=="lpc")   // If an option specifying that the program is runnong on LPC is specified, set the appropriate variables.
+    if(argc>1) procLocation_ = argv[1];
+    if(procLocation_=="LPC")   // If an option specifying that the program is runnong on LPC is specified, set the appropriate variables.
     {
         ntupleFileNames_.push_back("root://cmseos.fnal.gov//store/user/leptonjets/noreplica/godshalk/ZJNtuples_RunII/DY1JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1_2016-04_1of7.root/tree");
         ntupleFileNames_.push_back("root://cmseos.fnal.gov//store/user/leptonjets/noreplica/godshalk/ZJNtuples_RunII/DY1JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1_2016-04_2of7.root/tree");
@@ -56,7 +63,7 @@ NtupleProcessor::NtupleProcessor(int argc, char* argv[])
       ntuples_->Add(fn.c_str());
 
     logger_->info("{} NtupleProcessor initizated {}"  , logPrefix_, beginTime_.log_str());
-    logger_->info("{} Number of events to process: {}", logPrefix_, eventsToProcess_);
+    if(eventsToProcess_>0) logger_->info("{} Number of events to process: {}", logPrefix_, eventsToProcess_);
 
   // Process the tree.
     if(eventsToProcess_>0) ntuples_->Process(tIter_, "", eventsToProcess_);
@@ -79,9 +86,11 @@ void NtupleProcessor::initializeLogging()
     string logDir = "logs/";
     string logFilename = "NtupleProcessor_";
     logFilename += beginTime_.fn_str() + ".log";
+    logPrefix_ = (logDebug_ ? "[NP]" : "");
 
   // Log format
     string logFormat = "%v";
+    if(logDebug_) logFormat = "[%Y-%m-%d %H:%M:%S.%e|%l]%v";
 
     try
     { // Create sinks (outputs) for loggers
@@ -103,7 +112,6 @@ void NtupleProcessor::initializeLogging()
         sinks[2]->set_level(spdlog::level::err );
         if(logDebug_)
         {
-            logFormat = "[%Y-%m-%d %H:%M:%S.%e|%l] : %v";
             logger_ ->set_level(spdlog::level::trace);
             sinks[0]->set_level(spdlog::level::trace);
             sinks[1]->set_level(spdlog::level::debug);
@@ -114,17 +122,41 @@ void NtupleProcessor::initializeLogging()
       // Set log format and register logger globally
         logger_->set_pattern(logFormat.c_str());
         spdlog::register_logger(logger_);
+
+      // Set logger to asynchronous mode
+        spdlog::set_async_mode(4096);
     }
     catch (const spdlog::spdlog_ex& ex)
     {
-        std::cout << "Log failed: " << ex.what() << std::endl;
+        cout << "Log failed: " << ex.what() << endl;
     }
-    logPrefix_ = (logDebug_ ? "[NP]" : "");
 }
 
-void NtupleProcessor::processCommandLineInput(int argc, char* argv[])
-{
-    eventsToProcess_ = 1000;
-    logQuiet_ = true;
-    logDebug_ = false;
+bool NtupleProcessor::processCommandLineInput(int argc, char* argv[])
+{ // Process command line input.
+  // Returns false if help is called or input is invalid.
+    // Set up options
+    po::options_description opDesc("NtupleProcessor options", 150);
+    opDesc.add_options()
+        ("help"     ",h",                                                         "Print help message"                                   )
+        ("debug"    ",d",                                                         "Increased output for debugging purposes."             )
+        ("quiet"    ",q",                                                         "Minimal console output. Output still logged in file." )
+        ("location" ",l",  po::value<string>()->default_value(procLocation_    ), "Location of processing (currently either CUJO or LPC)")
+        ("maxevents"",m",  po::value<int>()   ->default_value(eventsToProcess_ ), "Number of events to process"                          )
+        ("options"  ",o",  po::value<string>()->default_value(options_         ), "Misc. options"                                        )
+    ;
+    po::variables_map cmdInput;
+    po::store(po::parse_command_line(argc, argv, opDesc), cmdInput);
+    po::notify(cmdInput);
+    if(cmdInput.count("help"))
+    {   cout << "\n" << opDesc << endl; return false; }
+
+  // Extract and store variables.
+    if(cmdInput.count("location"))
+        procLocation_ = cmdInput["location"].as<string>();
+    logDebug_         = cmdInput.count("debug");
+    logQuiet_         = cmdInput.count("quiet");
+    eventsToProcess_  = ( cmdInput.count("maxevents") ? cmdInput["maxevents"].as<int>() : -1);
+
+    return true;
 }
