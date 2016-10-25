@@ -24,12 +24,14 @@
 // Root Classes
 #include <TChain.h>
 #include <TSelector.h>
+// Project Specific
+#include <EventHandler.h>
 
 typedef unsigned long counter;
 
 class TreeIterator : public TSelector
 {
-public:
+  public:
     TreeIterator();
     virtual ~TreeIterator(){}
 
@@ -60,8 +62,10 @@ public:
     virtual void    Terminate();
       // Worker and client termination functions.
 
-  // TTree
+  private:
+  // Tree and Handler
     TTree *fChain;
+    EventHandler* evt;
 
   // Logging
     std::shared_ptr<spdlog::logger> logger_;

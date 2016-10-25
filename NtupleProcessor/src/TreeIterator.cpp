@@ -13,6 +13,7 @@ TreeIterator.cpp
 #include <iostream>
 #include "NtupleProcessor.h"
 #include "TreeIterator.h"
+#include "EventHandler.h"
 
 using std::string;
 
@@ -23,6 +24,9 @@ TreeIterator::TreeIterator()
     logger_ = spdlog::get("NtupleProcessor_log");
     if(!logger_) std::cerr << "ERROR: LOGGER NOT FOUND." << std::endl;
     logPrefix_ = (logger_->level() == spdlog::level::trace ? "[TI]  " : "  ");
+    logger_->debug("{} TreeIterator Created.", logPrefix_);
+
+    evt = new EventHandler();
 }
 
 void TreeIterator::Begin(TTree * /*tree*/){}
@@ -48,7 +52,6 @@ void TreeIterator::Init(TTree *tree)
     nEntries_   = tree->GetEntries();
     finalEntry_ = tree->GetEntries()-1;
 
-    //cout << " Processing New Tree (# Entries: " << nEntries_ << ")" << endl;
     logger_->info("{} Processing New Tree (# Entries: {})", logPrefix_, nEntries_);
 
   // Initialize Event Handler, adding the criteria of each HistoMaker to it's list of criteria.
@@ -57,7 +60,6 @@ void TreeIterator::Init(TTree *tree)
     fChain->SetBranchAddress("Vtype", &m_Vtype_);
 }
 
-
 Bool_t TreeIterator::Notify()
 {
   //  Init(fChain);
@@ -65,14 +67,13 @@ Bool_t TreeIterator::Notify()
     return kTRUE;
 }
 
-
 Bool_t TreeIterator::Process(Long64_t entry)
 {
   // Load current entry
     fChain->GetTree()->GetEntry(entry);
     nEntriesProcessed_++;
-    if(nEntriesProcessed_%100000 == 0 || nEntriesProcessed_==finalEntry_) logger_->info("{} #{}", logPrefix_, nEntriesProcessed_);
 
+    if(nEntriesProcessed_%100000 == 0 || nEntriesProcessed_==finalEntry_) logger_->info("{} #{}", logPrefix_, nEntriesProcessed_);
   // Evaluate selection profiles.
 
   // Call each HistogramMakers

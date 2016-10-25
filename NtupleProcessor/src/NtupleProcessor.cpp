@@ -44,10 +44,10 @@ NtupleProcessor::NtupleProcessor(int argc, char* argv[])
     beginTime_.update();
     if(!processCommandLineInput(argc, argv)) throw("help");
     initializeLogging();
+    logger_->debug("{} NtupleProcessor Created.", logPrefix_);
     tIter_ = new TreeIterator();
 
   // Handle file/tree input. (TEMPORARY: will eventually be replaced w/ input options.)
-    if(argc>1) procLocation_ = argv[1];
     if(procLocation_=="LPC")   // If an option specifying that the program is runnong on LPC is specified, set the appropriate variables.
     {
         ntupleFileNames_.push_back("root://cmseos.fnal.gov//store/user/leptonjets/noreplica/godshalk/ZJNtuples_RunII/DY1JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1_2016-04_1of7.root/tree");
