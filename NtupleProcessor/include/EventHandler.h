@@ -12,6 +12,7 @@
 ------------------------------------------------------------------------------*/
 
 // Standard Libraries
+#include <vector>
 // Submodules
 #include "spdlog/spdlog.h"
 // Root Classes
@@ -30,9 +31,11 @@ class EventHandler
     void mapTree(TTree*);
     void evaluateEvent();
 
+    EventMap evtMap_;
+
   private:
     Logger   logger_;
-    EventMap evtMap_;
+
 };
 
 

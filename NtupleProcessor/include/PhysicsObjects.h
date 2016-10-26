@@ -12,22 +12,26 @@
 
 ------------------------------------------------------------------------------*/
 
-// Standard Libraries
-#include <vector>
+// Root libraries
+#include <Rtypes.h>
 
 struct Jet
 {
-  Float_t &Jet_pt       ;
-  Float_t &Jet_eta      ;
-  Float_t &Jet_phi      ;
-  Int_t   &Jet_mcFlavour;
-  Float_t &Jet_btagCSV  ;
-  Float_t &Jet_vtxMass  ;
-}
+  Float_t pt            ;
+  Float_t eta           ;
+  Float_t phi           ;
+  Int_t   mcFlavour     ;
+  Float_t btagCSV       ;
+  Float_t vtxMass       ;
+};
 
 struct Lepton
 {
-
-}
+  Int_t   charge;
+  Float_t pt;
+  Float_t eta;
+  Float_t phi;
+  Float_t pfRelIso04;
+};
 
 #endif

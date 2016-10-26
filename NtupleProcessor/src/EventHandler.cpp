@@ -12,7 +12,7 @@ EventHandler.cpp
 
 
 EventHandler::EventHandler() :
-  logger_("NtupleProcessor", "[EH]     "), evtMap_()
+  evtMap_(), logger_("NtupleProcessor", "[EH]     ")
 {
     logger_.debug("EventHandler Created.");
 }
@@ -27,5 +27,7 @@ void EventHandler::evaluateEvent()
 { // Use tree map to set up physics objects
     logger_.trace("evaluateEvent(): called");
 
-    // Do some work
+    // Take variables from EventMap, input into this class.
+    // Variables that don't need any modification
+    // Variables that are mapped onto structs (jets, leptons)
 }

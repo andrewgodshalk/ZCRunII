@@ -57,7 +57,7 @@ void EventMap::mapTree(TTree* tree)
     tree->SetBranchAddress( "selLeptons_eta"       ,  selLeptons_eta        );
     tree->SetBranchAddress( "selLeptons_phi"       ,  selLeptons_phi        );
     tree->SetBranchAddress( "selLeptons_pfRelIso04",  selLeptons_pfRelIso04 );
-     tree->SetBranchAddress( "nJet"                 , &nJet                  );
+    tree->SetBranchAddress( "nJet"                 , &nJet                  );
     tree->SetBranchAddress( "Jet_pt"               ,  Jet_pt                );
     tree->SetBranchAddress( "Jet_eta"              ,  Jet_eta               );
     tree->SetBranchAddress( "Jet_phi"              ,  Jet_phi               );

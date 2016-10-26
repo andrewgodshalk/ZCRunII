@@ -10,10 +10,12 @@
  Class created to map event values in a TTree into structs/classes/variables,
  which are then accessed by EventHandler.
 
- New variables need to be added in three places:
+ New variables need to be added in five places:
  - Map variable needs to be added to class def (header file)
  - Branch needs to be added to branchesToReactivate in mapTree() (source file)
  - Branch needs to be mapped to map variable in mapTree() (source file)
+ - Variable may need to be added to PhysicsObjects.h if
+ - Variable needs to be fed through EventHandler for access by HistogramMakers.
 
 ------------------------------------------------------------------------------*/
 
@@ -21,7 +23,6 @@
 // Submodules
 #include "spdlog/spdlog.h"
 // Root Classes
-#include <Rtypes.h>
 #include <TChain.h>
 // Project Specific classes
 #include "Logger.h"

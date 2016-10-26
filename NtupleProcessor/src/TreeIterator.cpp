@@ -73,6 +73,8 @@ Bool_t TreeIterator::Process(Long64_t entry)
 
   // Call each HistogramMakers
     // for each histomaker, histomaker->storeEvt()
+    // TEST
+    logger_.debug("Event mapped. Test: Vtype = {}", evt->evtMap_.Vtype);
 
     nEntriesProcessed_++;
     return true;
