@@ -68,16 +68,12 @@ class TreeIterator : public TSelector
     TTree *fChain;
     EventHandler* evt;
 
-  // Logging
     Logger logger_;
 
   // Internal counters
     counter nEntries_;            // Total number of entries in chain
     counter finalEntry_;          // Index of last entry
     counter nEntriesProcessed_;   // Total number of events processed from chain
-
-  // TEST VARIABLES
-    float m_Vtype_ = 0;
 
 };
 

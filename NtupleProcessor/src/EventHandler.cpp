@@ -7,17 +7,25 @@ EventHandler.cpp
 */
 
 // Standard Libraries
-#include <iostream>
 // Project Specific
 #include "EventHandler.h"
 
 
 EventHandler::EventHandler() :
-  logger_("NtupleProcessor_log", "[EH]     ")
+  logger_("NtupleProcessor", "[EH]     "), evtMap_()
 {
-  // Set up logger
-    // logger_ = spdlog::get("NtupleProcessor_log");
-    // if(!logger_) std::cerr << "ERROR: LOGGER NOT FOUND." << std::endl;
-    // logPrefix_ = (logger_->level() == spdlog::level::trace ? "[EH]    " : "    ");
     logger_.debug("EventHandler Created.");
+}
+
+void EventHandler::mapTree(TTree* tree)
+{ // Map the input tree to variables locally
+    logger_.trace("mapTree(): called");
+    evtMap_.mapTree(tree);
+}
+
+void EventHandler::evaluateEvent()
+{ // Use tree map to set up physics objects
+    logger_.trace("evaluateEvent(): called");
+
+    // Do some work
 }

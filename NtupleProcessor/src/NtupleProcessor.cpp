@@ -15,6 +15,8 @@ NtupleProcessor.cpp
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <boost/program_options/variables_map.hpp>
+// ROOT Libraries
+//#include "TApplication.h"
 // Project Specific classes
 #include "NtupleProcessor.h"
 #include "TimeStamp.h"
@@ -28,6 +30,11 @@ namespace po = boost::program_options;
 // MAIN() - Used only to pass on input to NtupleProcessor class.
 int main(int argc, char* argv[])
 { // Set up NtupleProcessor
+  // Set up root environment
+  // Needed to make sure ROOT libraries "link correctly. Receive seg faults while trying to use TH2F in LeptonSFData otherwise.
+  // Recommendation found at link: https://root.cern.ch/phpBB3/viewtopic.php?f=3&t=18101&p=76968#p76968
+    //TApplication a("a", 0, 0); // just to make sure that the autoloading of ROOT libraries works
+
   // Try/catch set up for the sole pupose of catching false return on
     try { NtupleProcessor nProc (argc, argv); }
     catch(const char* msg)
@@ -39,7 +46,7 @@ int main(int argc, char* argv[])
 }
 
 NtupleProcessor::NtupleProcessor(int argc, char* argv[])
-  : logQuiet_(false), logDebug_(false), procLocation_(""), eventsToProcess_(0), options_(""), ntupleFileNames_(), logger_("NtupleProcessor_log", "[NP] ")
+  : logQuiet_(false), logDebug_(false), procLocation_(""), eventsToProcess_(0), options_(""), ntupleFileNames_(), logger_("NtupleProcessor", "[NP] ")
 { // Class initialization
     beginTime_.update();
     if(!processCommandLineInput(argc, argv)) throw("help");

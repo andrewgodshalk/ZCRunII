@@ -7,18 +7,19 @@
  Created : 2016-10-25  godshalk
  Modified: 2016-10-25  godshalk
 
- Class created to map event values in a TTree into structs/classes/variables.
+ Class that handles physics objects from event map.
 
 ------------------------------------------------------------------------------*/
 
 // Standard Libraries
-#include <memory>
-#include <string>
 // Submodules
 #include "spdlog/spdlog.h"
 // Root Classes
+#include <TChain.h>
 // Project Specific classes
+#include "EventMap.h"
 #include "Logger.h"
+#include "PhysicsObjects.h"
 
 class EventHandler
 {
@@ -26,11 +27,12 @@ class EventHandler
     EventHandler();
     ~EventHandler(){}
 
-    float m_Vtype_ = -1;
+    void mapTree(TTree*);
+    void evaluateEvent();
 
   private:
-  // Logging
-    Logger logger_;
+    Logger   logger_;
+    EventMap evtMap_;
 };
 
 
