@@ -12,14 +12,15 @@
 ------------------------------------------------------------------------------*/
 
 // Standard Libraries
+#include <map>
 // Submodules
 #include "spdlog/spdlog.h"
 // Root Classes
 #include <TChain.h>
 // Project Specific classes
-#include "EventMap.h"
 #include "Logger.h"
-#include "PhysicsObjects.h"
+
+typedef double (*getVal)(int);
 
 class EventHandler
 {
@@ -30,9 +31,14 @@ class EventHandler
     void mapTree(TTree*);
     void evaluateEvent();
 
+    getVal operator[](const char* v){return vals[v];}
+
   private:
-    Logger   logger_;
-    EventMap evtMap_;
+    TTree *tree_;
+    Logger logger_;
+    std::map<const char*,getVal> vals;
+    // double getValue(const char*, int);
+    inline double getValue(const char* label, int i) { return tree_->GetLeaf(label)->GetValue(i); }
 };
 
 
