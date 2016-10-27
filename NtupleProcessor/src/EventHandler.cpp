@@ -78,5 +78,5 @@ double EventHandler::get(const char* v, int i)
         return -1;
     }
 //    return (this->*valFunctions[v]))(v,i);
-    return (this->*(valFunctions[v]))(v,i);
+//    return (this->*(this->valFunctions[v]))(v,i);
 }
