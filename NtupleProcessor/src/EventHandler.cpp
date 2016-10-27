@@ -10,7 +10,7 @@ EventHandler.cpp
 #include <fstream>
 #include <sstream>
 // Root Classes
-#include <TLeaf.h>
+//#include <TLeaf.h>
 // Project Specific
 #include "EventHandler.h"
 
@@ -29,6 +29,9 @@ void EventHandler::mapTree(TTree* tree)
     logger_.trace("mapTree(): called");
     tree_ = tree;
 
+  // FOR TEST PURPOSES
+    tree_->GetEntry(0);
+
   // input mapped variabeles from file.
     string mappedVariablesFileName = "NtupleProcessor/config/mapped_variables.config";
     logger_.trace("Inputting mapped variables file: {}", mappedVariablesFileName);
@@ -46,7 +49,9 @@ void EventHandler::mapTree(TTree* tree)
       if(!leaf){ logger_.error("  Unable to map {} from tree", label); continue;}
 
       //vals[label.c_str()] = getVal{ [this,label](int i){getValue(label.c_str(), i);}};
-      vals[label.c_str()] = getValue;
+      // valFunctions[label.c_str()] = &EventHandler::getValue;
+      valFunctions[label.c_str()] = &EventHandler::getValue;
+      logger_.trace("Mapped function for {} returns {} at index 0", label, (this->*valFunctions[label.c_str()])(label.c_str(),0));
     }
     mappedVariablesFile.close();
 }
@@ -58,7 +63,20 @@ void EventHandler::evaluateEvent()
     // Do some work
 }
 
-// double EventHandler::getValue(const char* label, int i)
-// {
-//     return tree_->GetLeaf(label.c_str())->GetValue(i);
-// }
+double EventHandler::getValueDebug(const char* label, int i)
+{
+    logger_.trace("Accessing Tree with name {}", tree_->GetName());
+    logger_.trace("Accessing Leaf with name {}", tree_->GetLeaf(label)->GetName());
+    return 0;
+}
+
+double EventHandler::get(const char* v, int i)
+{
+    if(valFunctions[v] == NULL)
+    {
+        logger_.error("Function for {} not properly linked.", v);
+        return -1;
+    }
+//    return (this->*valFunctions[v]))(v,i);
+    return (this->*(valFunctions[v]))(v,i);
+}

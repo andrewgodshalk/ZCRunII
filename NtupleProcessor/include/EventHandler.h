@@ -17,10 +17,10 @@
 #include "spdlog/spdlog.h"
 // Root Classes
 #include <TChain.h>
+#include <TLeaf.h>
 // Project Specific classes
 #include "Logger.h"
 
-typedef double (*getVal)(int);
 
 class EventHandler
 {
@@ -31,15 +31,18 @@ class EventHandler
     void mapTree(TTree*);
     void evaluateEvent();
 
-    getVal operator[](const char* v){return vals[v];}
+    //double get(const char* v, int i=0){return (this->*valFunctions[v])(v,i);};
+    double get(const char*, int i=0);
+    // getVal operator[](const char* v){return vals[v];}
+    // double getValue(const char*, int);
+    inline double getValue(const char* label, int i) { return tree_->GetLeaf(label)->GetValue(i); }
+    double getValueDebug(const char*, int);
 
   private:
     TTree *tree_;
     Logger logger_;
-    std::map<const char*,getVal> vals;
-    // double getValue(const char*, int);
-    inline double getValue(const char* label, int i) { return tree_->GetLeaf(label)->GetValue(i); }
+    typedef double (EventHandler::*getVal)(const char*, int);
+    std::map<const char*,getVal> valFunctions;
 };
-
 
 #endif

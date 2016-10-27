@@ -20,7 +20,7 @@ TreeIterator::TreeIterator()
 {
     logger_.debug("TreeIterator Created.");
 
-    evt = new EventHandler();
+    evt_ = new EventHandler();
 }
 
 void TreeIterator::Begin(TTree * /*tree*/){}
@@ -49,7 +49,7 @@ void TreeIterator::Init(TTree *tree)
     logger_.info("Processing New Tree (# Entries: {})", nEntries_);
 
   // Initialize Event Handler, adding the criteria of each HistoMaker to it's list of criteria.
-    evt->mapTree(fChain);
+    evt_->mapTree(fChain);
 }
 
 Bool_t TreeIterator::Notify()
@@ -69,10 +69,14 @@ Bool_t TreeIterator::Process(Long64_t entry)
     if(nEntriesProcessed_%100000 == 0 || nEntriesProcessed_==finalEntry_) logger_.info("#{}", nEntriesProcessed_);
 
   // Evaluate selection profiles.
-    evt->evaluateEvent();
+    evt_->evaluateEvent();
 
   // Call each HistogramMakers
     // for each histomaker, histomaker->storeEvt()
+    // TEST
+    logger_.debug("TEST: Vtype = {}", "???");
+    logger_.debug("TEST: Vtype = {}", evt_->get("Vtype"));
+
 
     nEntriesProcessed_++;
     return true;
