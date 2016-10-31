@@ -41,8 +41,8 @@ class EventHandler
   private:
     TTree *tree_;
     Logger logger_;
-    typedef double (EventHandler::*getVal)(const char*, int);
-    std::map<const char*,getVal> valFunctions;
+    //typedef double (EventHandler::*getVal)(const char*, int);
+    //std::map<const char*,getVal> valFunctions;
 };
 
 #endif

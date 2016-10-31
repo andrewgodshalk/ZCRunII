@@ -77,6 +77,6 @@ double EventHandler::get(const char* v, int i)
         logger_.error("Function for {} not properly linked.", v);
         return -1;
     }
-//    return (this->*valFunctions[v]))(v,i);
+    return (this->*valFunctions[v]))(v,i);
 //    return (this->*(this->valFunctions[v]))(v,i);
 }
