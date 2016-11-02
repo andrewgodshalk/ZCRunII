@@ -73,10 +73,9 @@ Bool_t TreeIterator::Process(Long64_t entry)
 
   // Call each HistogramMakers
     // for each histomaker, histomaker->storeEvt()
-    // TEST
-    logger_.debug("TEST: Vtype = {}", "???");
-    logger_.debug("TEST: Vtype = {}", evt_->get("Vtype"));
 
+  // TEST
+    // logger_.debug("TEST: Vtype = {}");
 
     nEntriesProcessed_++;
     return true;

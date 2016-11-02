@@ -7,16 +7,16 @@ EventHandler.cpp
 */
 
 // Standard Libraries
-#include <fstream>
-#include <sstream>
+//#include <fstream>
+//#include <sstream>
 // Root Classes
 //#include <TLeaf.h>
 // Project Specific
 #include "EventHandler.h"
 
-using std::string;
-using std::ifstream;
-using std::stringstream;
+//using std::string;
+//using std::ifstream;
+//using std::stringstream;
 
 EventHandler::EventHandler() :
   logger_("NtupleProcessor", "[EH]     ")//, evtMap_()
@@ -28,7 +28,19 @@ void EventHandler::mapTree(TTree* tree)
 { // Map the input tree to variables locally
     logger_.trace("mapTree(): called");
     tree_ = tree;
+    //
 
+  // Current goal: map single level of variabels from tree.
+  // Pseudo:
+    // Deactivate all variables in tree to save memory. Will reactivate later.
+    tree->SetBranchStatus("*",0);
+
+    // Collect list of variables from input (function()) (collect three lists?)
+    //getActiveVariables("")
+    // Reactivate relavent variables.
+    //
+
+/*
   // FOR TEST PURPOSES
     tree_->GetEntry(0);
 
@@ -47,13 +59,9 @@ void EventHandler::mapTree(TTree* tree)
       logger_.trace("  Extracted part: {}", label);
       leaf = tree->GetLeaf(label.c_str());
       if(!leaf){ logger_.error("  Unable to map {} from tree", label); continue;}
-
-      //vals[label.c_str()] = getVal{ [this,label](int i){getValue(label.c_str(), i);}};
-      // valFunctions[label.c_str()] = &EventHandler::getValue;
-      valFunctions[label.c_str()] = &EventHandler::getValue;
-      logger_.trace("Mapped function for {} returns {} at index 0", label, (this->*valFunctions[label.c_str()])(label.c_str(),0));
     }
     mappedVariablesFile.close();
+*/
 }
 
 void EventHandler::evaluateEvent()
@@ -63,6 +71,7 @@ void EventHandler::evaluateEvent()
     // Do some work
 }
 
+/*
 double EventHandler::getValueDebug(const char* label, int i)
 {
     logger_.trace("Accessing Tree with name {}", tree_->GetName());
@@ -80,3 +89,4 @@ double EventHandler::get(const char* v, int i)
     return (this->*valFunctions[v]))(v,i);
 //    return (this->*(this->valFunctions[v]))(v,i);
 }
+*/

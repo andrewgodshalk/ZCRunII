@@ -10,7 +10,7 @@ SRCDIR := src
 HDRDIR := include
 BUILDDIR := build
 TARGETDIR := bin
-TARGET := bin/NtupleProcessor.exe
+TARGET := bin/NtupleProcessor
 
 SRCEXT := cpp
 HDREXT := h
