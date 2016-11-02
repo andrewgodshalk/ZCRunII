@@ -9,6 +9,7 @@
 
  Class that handles physics objects from event map.
 
+  2016-11-02 - Added Jet/LeptonObjects and mapPhysicsObjects() to initialize them.
 ------------------------------------------------------------------------------*/
 
 // Standard Libraries
@@ -21,6 +22,7 @@
 #include "EventMap.h"
 #include "Logger.h"
 #include "JetObject.h"
+#include "LeptonObject.h"
 //#include "PhysicsObjects.h"
 
 class EventHandler
@@ -36,7 +38,7 @@ class EventHandler
 
   // Array variables mapped to objects.
     std::vector<   JetObject> jets_   ;
-    // std::vector<LeptonObject> leptons_;
+    std::vector<LeptonObject> leptons_;
 
   private:
     Logger   logger_;

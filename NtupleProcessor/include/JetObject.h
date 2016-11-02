@@ -12,9 +12,6 @@
 
  2016-11-02 - Split from PhysicsObjects.h file.
 
- To do:
- - Add returns (i.e. JetObject.getPt()), where a modifier can be added within the function for JEC, error, etc.
-
 ------------------------------------------------------------------------------*/
 
 // Root libraries

@@ -2,14 +2,13 @@
 EventHandler.cpp
 
  Created : 2016-10-25  godshalk
- Modified: 2016-10-25  godshalk
+ Modified: 2016-11-02  godshalk
 
 */
 
 // Standard Libraries
 // Project Specific
 #include "EventHandler.h"
-
 
 EventHandler::EventHandler() :
   evtMap_(), logger_("NtupleProcessor", "[EH]     ")
@@ -36,5 +35,6 @@ void EventHandler::evaluateEvent()
 void EventHandler::mapPhysicsObjects()
 { // Helper Function. Helps create vectors of mapped physics objects.
     logger_.trace("mapPhysicsObjects(): called");
-    for (size_t i = 0; i < EventMap::maxNumJets_; i++) jets_.push_back(JetObject(&evtMap_, i));
+    for (size_t i = 0; i < EventMap::maxNumJets_; i++)    jets_.push_back(   JetObject(&evtMap_, i));
+    for (size_t i = 0; i < EventMap::maxNumLeps_; i++) leptons_.push_back(LeptonObject(&evtMap_, i));
 }

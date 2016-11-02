@@ -16,7 +16,6 @@ EventMap.cpp
 using std::string;   using std::vector;
 
 EventMap::EventMap() :
-  // jets_(maxNumJets_), //leptons_(maxNumLeps_),
   logger_("NtupleProcessor", "[EM]       ")
 {
     logger_.trace("EventMap Created.");
@@ -95,6 +94,4 @@ void EventMap::mapTree(TTree* tree)
     tree->SetBranchAddress( "HLT_BIT_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v"       , &HLT_BIT_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v        );
     logger_.trace("mapTree(): branch variables mapped.");
 
-  // Set up physics object lists.
-    // mapPhysicsObjects();
 }

@@ -18,12 +18,19 @@
     (src/EventMap.cpp :  mapTree())
  - Branch needs to be mapped to map variable
     (src/EventMap.cpp : mapTree())
+
  If the value is part of a physics object (jet, lepton)
- - Variable may need to be added to PhysicsObjects.h if its a property of a jet or lepton.
-    (include/PhysicsObjects.h)
- - Mapping needs to be done to the PhysicsObject
-    (src/EventMap.cpp : map[Jet|Lepton]Object())
- - Some sort of interface needs to be coded into EventHandler class for use in HistogramMakers.
+ - Variable will need to be added to appropriate header
+   (include/Lepton(Jet)Object.h)
+  - Variable will need to be initialized in base constructor
+   (include/Lepton(Jet)Object.h)
+  - Variable will need to be initialized in intended constructor
+   (src/Lepton(Jet)Object.cpp)
+  - Variable will need an accessor function (header or src, depending on necessary modifications.)
+
+ When changing jet/lepton collections (e.g. selLeptons->vLeptons), variables will
+ need to be changed all over the place, including here and in the physics object
+ files. Be wary.
 
 ------------------------------------------------------------------------------*/
 
@@ -34,10 +41,6 @@
 #include <TChain.h>
 // Project Specific classes
 #include "Logger.h"
-// #include "PhysicsObjects.h"
-// #include "JetObject.h"
-
-//class JetObject;
 
 struct EventMap
 {
