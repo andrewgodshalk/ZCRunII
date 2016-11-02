@@ -16,10 +16,10 @@ EventMap.cpp
 using std::string;   using std::vector;
 
 EventMap::EventMap() :
-  jets_(maxNumJets_), leptons_(maxNumLeps_),
+  // jets_(maxNumJets_), //leptons_(maxNumLeps_),
   logger_("NtupleProcessor", "[EM]       ")
 {
-    logger_.debug("EventMap Created.");
+    logger_.trace("EventMap Created.");
 }
 
 void EventMap::mapTree(TTree* tree)
@@ -96,29 +96,5 @@ void EventMap::mapTree(TTree* tree)
     logger_.trace("mapTree(): branch variables mapped.");
 
   // Set up physics object lists.
-    mapPhysicsObjects();
-}
-
-void EventMap::mapPhysicsObjects()
-{ // Helper Function. Helps create vectors of mapped physics objects.
-    logger_.trace("mapPhysicsObjects(): called");
-    for (size_t i = 0; i < maxNumJets_; i++)
-    {   jets_[i].pt        = &(Jet_pt       [i]);
-        jets_[i].eta       = &(Jet_eta      [i]);
-        jets_[i].phi       = &(Jet_phi      [i]);
-        jets_[i].mcFlavour = &(Jet_mcFlavour[i]);
-        jets_[i].btagCSV   = &(Jet_btagCSV  [i]);
-        jets_[i].vtxMass   = &(Jet_vtxMass  [i]);
-    }
-    for (size_t i = 0; i < maxNumLeps_; i++)
-    {   leptons_[i].charge     = selLeptons_charge    [i];
-        leptons_[i].pt         = selLeptons_pt        [i];
-        leptons_[i].eta        = selLeptons_eta       [i];
-        leptons_[i].phi        = selLeptons_phi       [i];
-        leptons_[i].pfRelIso04 = selLeptons_pfRelIso04[i];
-    }
-//    if(&jets_[0].pt == &(Jet_pt[0])) logger_.debug("mapPhysicsObjects(): test: references are equal.");
-    if(&(jets_[0].pt) == &(Jet_pt[0])) logger_.debug("mapPhysicsObjects(): test: references are equal.");
-    std::cout << &(jets_[0].pt) << std::endl;
-    std::cout << &(Jet_pt[0]) << std::endl;
+    // mapPhysicsObjects();
 }

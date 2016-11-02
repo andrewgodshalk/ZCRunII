@@ -30,19 +30,16 @@
 // Standard Libraries
 #include <string>
 #include <vector>
-// Submodules
-#include "spdlog/spdlog.h"
 // Root Classes
 #include <TChain.h>
 // Project Specific classes
 #include "Logger.h"
-#include "PhysicsObjects.h"
+// #include "PhysicsObjects.h"
+// #include "JetObject.h"
 
-// Global variables to determine size of mapped arrays.
-//const static int MAXNUMJETS = 130;
-//const static int MAXNUMLEPS = 100;
+//class JetObject;
 
-class EventMap
+struct EventMap
 {
   public:
     EventMap();
@@ -80,16 +77,8 @@ class EventMap
     Float_t Jet_btagCSV  [maxNumJets_];
     Float_t Jet_vtxMass  [maxNumJets_];
 
-    // Array variables mapped to objects.
-    std::vector<   JetObject> jets_   ;
-    std::vector<LeptonObject> leptons_;
-
   private:
     Logger logger_;
-
-    // Helper function to set up physics object lists
-    void mapPhysicsObjects();
-
 
 };
 

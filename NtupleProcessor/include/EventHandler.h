@@ -20,7 +20,8 @@
 // Project Specific classes
 #include "EventMap.h"
 #include "Logger.h"
-#include "PhysicsObjects.h"
+#include "JetObject.h"
+//#include "PhysicsObjects.h"
 
 class EventHandler
 {
@@ -33,8 +34,16 @@ class EventHandler
 
     EventMap evtMap_;
 
+  // Array variables mapped to objects.
+    std::vector<   JetObject> jets_   ;
+    // std::vector<LeptonObject> leptons_;
+
   private:
     Logger   logger_;
+
+  // Helper function to set up physics object lists
+    void mapPhysicsObjects();
+
 
 };
 

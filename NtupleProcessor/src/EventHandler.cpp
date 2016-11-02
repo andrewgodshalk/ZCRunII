@@ -21,6 +21,7 @@ void EventHandler::mapTree(TTree* tree)
 { // Map the input tree to variables locally
     logger_.trace("mapTree(): called");
     evtMap_.mapTree(tree);
+    mapPhysicsObjects();
 }
 
 void EventHandler::evaluateEvent()
@@ -30,4 +31,10 @@ void EventHandler::evaluateEvent()
     // Take variables from EventMap, input into this class.
     // Variables that don't need any modification
     // Variables that are mapped onto structs (jets, leptons)
+}
+
+void EventHandler::mapPhysicsObjects()
+{ // Helper Function. Helps create vectors of mapped physics objects.
+    logger_.trace("mapPhysicsObjects(): called");
+    for (size_t i = 0; i < EventMap::maxNumJets_; i++) jets_.push_back(JetObject(&evtMap_, i));
 }

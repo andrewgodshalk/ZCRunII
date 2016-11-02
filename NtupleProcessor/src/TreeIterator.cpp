@@ -20,7 +20,7 @@ TreeIterator::TreeIterator()
 {
     logger_.debug("TreeIterator Created.");
 
-    evt = new EventHandler();
+    evt_ = new EventHandler();
 }
 
 void TreeIterator::Begin(TTree * /*tree*/){}
@@ -49,7 +49,7 @@ void TreeIterator::Init(TTree *tree)
     logger_.info("Processing New Tree (# Entries: {})", nEntries_);
 
   // Initialize Event Handler, adding the criteria of each HistoMaker to it's list of criteria.
-    evt->mapTree(fChain);
+    evt_->mapTree(fChain);
 }
 
 Bool_t TreeIterator::Notify()
@@ -69,17 +69,16 @@ Bool_t TreeIterator::Process(Long64_t entry)
     if(nEntriesProcessed_%100000 == 0 || nEntriesProcessed_==finalEntry_) logger_.info("#{}", nEntriesProcessed_);
 
   // Evaluate selection profiles.
-    evt->evaluateEvent();
+    evt_->evaluateEvent();
 
   // Call each HistogramMakers
     // for each histomaker, histomaker->storeEvt()
     // TEST
-    logger_.debug("Event mapped. Test: nJet = {}", evt->evtMap_.nJet);
-    for (size_t i = 0; i < evt->evtMap_.nJet; i++)
-    {   logger_.debug("PhysicsObjects map test: evt->evtMap_.Jet_pt[i]   = {}", evt->evtMap_.Jet_pt[i]   );
-        logger_.debug("PhysicsObjects map test: evt->evtMap_.jets_[i].pt = {}", evt->evtMap_.jets_[i].pt );
+    logger_.debug("Event mapped. Test: nJet = {}", evt_->evtMap_.nJet);
+    for (int i = 0; i < evt_->evtMap_.nJet; i++)
+    {   logger_.debug("PhysicsObjects map test: evt_->evtMap_.Jet_pt[i] = {}", evt_->evtMap_.Jet_pt[i]   );
+        logger_.debug("PhysicsObjects map test: evt_->jets_[i].getPt()  = {}", evt_->jets_[i].getPt()    );
     }
-
 
     nEntriesProcessed_++;
     return true;

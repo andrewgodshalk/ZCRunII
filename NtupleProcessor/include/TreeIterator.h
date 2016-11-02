@@ -66,7 +66,7 @@ class TreeIterator : public TSelector
   private:
   // Tree and Handler
     TTree *fChain;
-    EventHandler* evt;
+    EventHandler* evt_;
 
     Logger logger_;
 
