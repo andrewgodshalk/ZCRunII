@@ -74,7 +74,12 @@ Bool_t TreeIterator::Process(Long64_t entry)
   // Call each HistogramMakers
     // for each histomaker, histomaker->storeEvt()
     // TEST
-    logger_.debug("Event mapped. Test: Vtype = {}", evt->evtMap_.Vtype);
+    logger_.debug("Event mapped. Test: nJet = {}", evt->evtMap_.nJet);
+    for (size_t i = 0; i < evt->evtMap_.nJet; i++)
+    {   logger_.debug("PhysicsObjects map test: evt->evtMap_.Jet_pt[i]   = {}", evt->evtMap_.Jet_pt[i]   );
+        logger_.debug("PhysicsObjects map test: evt->evtMap_.jets_[i].pt = {}", evt->evtMap_.jets_[i].pt );
+    }
+
 
     nEntriesProcessed_++;
     return true;

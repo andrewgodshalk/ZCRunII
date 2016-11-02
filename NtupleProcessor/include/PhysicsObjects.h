@@ -14,24 +14,39 @@
 
 // Root libraries
 #include <Rtypes.h>
+// Project Specific Headers
+#include "EventMap.h"
 
-struct Jet
+struct JetObject
 {
-  Float_t pt            ;
-  Float_t eta           ;
-  Float_t phi           ;
-  Int_t   mcFlavour     ;
-  Float_t btagCSV       ;
-  Float_t vtxMass       ;
+  Float_t &pt       ;
+  Float_t &eta      ;
+  Float_t &phi      ;
+  Int_t   &mcFlavour;
+  Float_t &btagCSV  ;
+  Float_t &vtxMass  ;
+
+  Float_t BLANK_f = -9999;
+  Int_t   BLANK_i = -99;
+
+  // Constructor
+  JetObject() : pt(BLANK_f), eta(BLANK_f), phi(BLANK_f), mcFlavour(BLANK_i), btagCSV(BLANK_f), vtxMass(BLANK_f) {}
 };
 
-struct Lepton
+struct LeptonObject
 {
-  Int_t   charge;
-  Float_t pt;
-  Float_t eta;
-  Float_t phi;
-  Float_t pfRelIso04;
+  Int_t   &charge    ;
+  Float_t &pt        ;
+  Float_t &eta       ;
+  Float_t &phi       ;
+  Float_t &pfRelIso04;
+
+  Float_t BLANK_f = -9999;
+  Int_t   BLANK_i  = -99;
+
+  // Constructor
+  LeptonObject() : charge(BLANK_i), pt(BLANK_f), eta(BLANK_f), phi(BLANK_f), pfRelIso04(BLANK_f) {}
+
 };
 
 #endif

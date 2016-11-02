@@ -5,28 +5,42 @@
    EventMap
 
  Created : 2016-10-25  godshalk
- Modified: 2016-10-26  godshalk
+ Modified: 2016-11-02  godshalk
 
  Class created to map event values in a TTree into structs/classes/variables,
  which are then accessed by EventHandler.
 
- New variables need to be added in five places:
- - Map variable needs to be added to class def (header file)
- - Branch needs to be added to branchesToReactivate in mapTree() (source file)
- - Branch needs to be mapped to map variable in mapTree() (source file)
- - Variable may need to be added to PhysicsObjects.h if
- - Variable needs to be fed through EventHandler for access by HistogramMakers.
+ New variables need to be added in multiple locations:
+
+ - Map variable needs to be added to class def
+    (include/EventMap.h)
+ - Branch needs to be added to list of branches
+    (src/EventMap.cpp :  mapTree())
+ - Branch needs to be mapped to map variable
+    (src/EventMap.cpp : mapTree())
+ If the value is part of a physics object (jet, lepton)
+ - Variable may need to be added to PhysicsObjects.h if its a property of a jet or lepton.
+    (include/PhysicsObjects.h)
+ - Mapping needs to be done to the PhysicsObject
+    (src/EventMap.cpp : map[Jet|Lepton]Object())
+ - Some sort of interface needs to be coded into EventHandler class for use in HistogramMakers.
 
 ------------------------------------------------------------------------------*/
 
 // Standard Libraries
+#include <string>
+#include <vector>
 // Submodules
 #include "spdlog/spdlog.h"
 // Root Classes
 #include <TChain.h>
 // Project Specific classes
 #include "Logger.h"
-//#include "EventMap.h"
+#include "PhysicsObjects.h"
+
+// Global variables to determine size of mapped arrays.
+//const static int MAXNUMJETS = 130;
+//const static int MAXNUMLEPS = 100;
 
 class EventMap
 {
@@ -36,8 +50,8 @@ class EventMap
 
     void mapTree(TTree*);
 
-    const static int maxNumJets_ = 130;   // TEMPORARY WORKING VARIABLE - will be included in config file?
-    const static int maxNumLeps_ = 100;   // TEMPORARY WORKING VARIABLE - will be included in config file?
+    const static size_t maxNumJets_ = 130;   // TEMPORARY WORKING VARIABLE - will be included in config file?
+    const static size_t maxNumLeps_ = 100;   // TEMPORARY WORKING VARIABLE - will be included in config file?
 
     // Map variables
     Float_t json  ;
@@ -66,10 +80,17 @@ class EventMap
     Float_t Jet_btagCSV  [maxNumJets_];
     Float_t Jet_vtxMass  [maxNumJets_];
 
+    // Array variables mapped to objects.
+    std::vector<   JetObject> jets_   ;
+    std::vector<LeptonObject> leptons_;
+
   private:
     Logger logger_;
 
-};
+    // Helper function to set up physics object lists
+    void mapPhysicsObjects();
 
+
+};
 
 #endif
