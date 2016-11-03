@@ -5,29 +5,37 @@
    HistogramExtractor Virtual Class
 
  Created : 2015-05-14  godshalk
- Modified: 2016-11-02  godshalk
+ Modified: 2016-11-03  godshalk
 
  Virtual class used as a base for classes that extract information from ntuples
  in the form of ROOT histograms.
 
- Designed to save the histograms as output to a folder in a root object.
+ 2016-11-03 - Added RFM, pass of ntuple info as standard
+ 2016-11-02 - Adapted from RunI ZCAnalysis repo for ZCRunII repository.
 
 ------------------------------------------------------------------------------*/
 
 // Standard Libraries
 #include <map>
+#include <string>
 // Root Classes
 #include <TDirectory.h>
 #include <TH1.h>
 // Project Specific classes
 #include "EventHandler.h"
 #include "Logger.h"
+#include "RootFileManager.h"
 
 
 class HistogramExtractor {
   public:
-    // HistogramExtractor(EventHandler* eh) : evt_(eh) {}
-    HistogramExtractor(){}
+    HistogramExtractor(std::string n, std::string c, std::string s)
+     : ntupleName_(n), className_(c), selectionProfile_(s)
+    {
+      // Set up RootFileManager
+      std::string fileName = className_ + "_" + ntupleName_ + "_" + selectionProfile_ + ".root";
+      rfManager_ = new RootFileManager(fileName);
+    }
     virtual ~HistogramExtractor(){}
 
     void setEventHandler(EventHandler* eh) { evt_ = eh; }
@@ -35,10 +43,13 @@ class HistogramExtractor {
     virtual void terminate(){}   // Function that saves the histograms and performs any final actions before processing is completed.
 
   protected:
-    EventHandler* evt_;   // Contains event information (selection profile, mapped variables, etc.)
+    std::string ntupleName_;
+    std::string className_;         // Name of this histogram extractor class.
+    std::string selectionProfile_;  // Base selection profile used for histogram collection.
+    EventHandler* evt_;             // Contains event information (selection profile, mapped variables, etc.)
+    RootFileManager* rfManager_;    // Manages output file where histograms are stored.
 
   // Histogram collection
-//    TDirectory* hDir;            // Root file directory where histograms are stored.
 //    std::map<TString, TH1*> h;   // List of histograms that will be filled by the fillHistos function
 
 };

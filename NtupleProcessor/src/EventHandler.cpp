@@ -11,7 +11,7 @@ EventHandler.cpp
 #include "EventHandler.h"
 
 EventHandler::EventHandler() :
-  evtMap_(), logger_("NtupleProcessor", "[EH]     ")
+  evtMap_(), logger_("NtupleProcessor", "[EH]   ")
 {
     logger_.debug("EventHandler Created.");
 }

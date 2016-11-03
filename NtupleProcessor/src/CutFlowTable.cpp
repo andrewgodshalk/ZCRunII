@@ -7,36 +7,49 @@ CutFlowTable.cpp
 // Project Specific classes
 #include "CutFlowTable.h"
 
-//CutFlowTable::CutFlowTable(EventHandler* e)
-CutFlowTable::CutFlowTable()
-  : // HistogramExtractor(e), maxStringLength_(0),
-    logger_("NtupleProcessor", "[CF]       ")
+using std::string;
+using std::to_string;
+
+CutFlowTable::CutFlowTable(string n)
+  : HistogramExtractor(n, "CFT", "Zll"),
+    logger_("NtupleProcessor", "[CF]     ")
 {
     logger_.debug("CutFlowTable created.");
 }
 
 void CutFlowTable::process()
 { // Called per event. Processes information and fills histograms.
-  if     (evt_->evtMap_.Vtype == 0) n_["Zuu"]      ++;
-  else if(evt_->evtMap_.Vtype == 1) n_["Zee"]      ++;
-  else if(evt_->evtMap_.Vtype == 5) n_["Vtype5"]   ++;
-  else                             n_["VtypeOther"]++;
+  // logger_.trace("process() called.");
+  if     (evt_->evtMap_.Vtype == 0) n_["VtypeZuu"]  ++;
+  else if(evt_->evtMap_.Vtype == 1) n_["VtypeZee"]  ++;
+  else if(evt_->evtMap_.Vtype == 5) n_["Vtype5"]    ++;
+  else                              n_["VtypeOther"]++;
 }
 
 void CutFlowTable::terminate()
 { // Function that saves the histograms and performs any final actions before processing is completed.
+    logger_.trace("terminate() called.");
     printTable();
+    rfManager_->close();
 }
 
 void CutFlowTable::printTable()
 {
+  logger_.trace("printTable() called.");
+
   // Find max length of strings
-    // for(auto &kv : n_)
-    //     if(kv.first.length() > maxStringLength_)
-    //         maxStringLength_ = kv.first.length();
+    unsigned int maxStringLength = 0;
+    unsigned int maxCountLength  = 0;
+    for(auto &kv : n_)
+    {   if(          kv.first  .length() > maxStringLength) maxStringLength =           kv.first  .length();
+        if(to_string(kv.second).length() > maxCountLength ) maxCountLength  = to_string(kv.second).length();
+    }
+    // logger_.trace("printTable(): maxStringLength = {}", maxStringLength);
+    // logger_.trace("printTable(): maxCountLength  = {}", maxCountLength);
 
   // Print to log.
     logger_.info(" === Cut Flow Table ================");
-    for(auto &kv : n_) logger_.info("{0:>20s} : {1:10}", kv.first, kv.second);
-
+    string countOutputFormat = "";
+    countOutputFormat += "{0:>"+to_string(maxStringLength)+"s} : {1:"+to_string(maxCountLength)+"}";
+    for(auto &kv : n_) logger_.info(countOutputFormat, kv.first, kv.second);
 }

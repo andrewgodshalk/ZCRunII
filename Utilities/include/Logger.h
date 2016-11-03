@@ -4,7 +4,15 @@
 /*------------------------------------------------------------------------------
   Logger class
 
+  Created:  2016-10-?
+  Modified: 2016-10-?
+
   Class adapted from old timestamp functions.
+
+  To do:
+  - Find some way to make debug output a standard length (see specification
+    in NtupleProcessor.cpp :: processCommandLineInput())
+  - Implement indentation levels?
 
 ------------------------------------------------------------------------------*/
 

@@ -59,9 +59,8 @@ NtupleProcessor::NtupleProcessor(int argc, char* argv[])
     logger_.debug("NtupleProcessor Created.");
 
   // Initialize Helper Classes, histogram makers, ntuples.
-    rfManager_ = new RootFileManager(beginTime_.fn_str());
-    initializeHistogramExtractors();
     initializeNtuples();
+    initializeHistogramExtractors();
     tIter_ = new TreeIterator(hExtractors_);
 
     logger_.info("NtupleProcessor initizated {}", beginTime_.log_str());
@@ -88,7 +87,12 @@ NtupleProcessor::NtupleProcessor(int argc, char* argv[])
 bool NtupleProcessor::processCommandLineInput(int argc, char* argv[])
 { // Process command line input.
   // Returns false if help is called or input is invalid.
-    // Set up options
+    logger_.trace("processCommandLineInput() called.");
+
+  // TEMP: Set up ntuple object
+    ntupleName_ = "dy";
+
+  // Set up options
     po::options_description opDesc("NtupleProcessor options", 150);
     opDesc.add_options()
         ("help"     ",h",                                                         "Print help message"                                   )
@@ -122,6 +126,8 @@ bool NtupleProcessor::processCommandLineInput(int argc, char* argv[])
 
 void NtupleProcessor::initializeNtuples()
 { // Set up ntuples from file.
+    logger_.trace("initializeNtuples() called.");
+
   // Handle file/tree input. (TEMPORARY: will eventually be replaced w/ input options.)
     if(procLocation_=="LPC")   // If an option specifying that the program is runnong on LPC is specified, set the appropriate variables.
     {
@@ -142,6 +148,8 @@ void NtupleProcessor::initializeNtuples()
 
 void NtupleProcessor::processNtuples()
 { // Process ntuples using tree iterator.
+    logger_.trace("processNtuples() called.");
+
     logger_.info("");
     logger_.info("====================================================================================================");
     logger_.info("===Beginning Event Processing===");
@@ -156,5 +164,7 @@ void NtupleProcessor::processNtuples()
 
 void NtupleProcessor::initializeHistogramExtractors()
 { // Sets up histogram extractors using input configuration files.
-    hExtractors_.push_back(new CutFlowTable());
+    logger_.trace("initializeHistogramExtractors() called.");
+
+    hExtractors_.push_back(new CutFlowTable(ntupleName_));
 }

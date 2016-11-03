@@ -4,12 +4,13 @@
 /*------------------------------------------------------------------------------
  NtupleProcessor
    Created : 2015-09-14  godshalk
-   Modified: 2016-10-24  godshalk
+   Modified: 2016-11-03  godshalk
  Main class of NtupleProcessor program. Created to handle input and running of
  ntuple processing.
  Takes input variables (datasets, configurations, etc) and sets up the
  appropriate classes to handle each portion of the analysis process.
 
+ 2016-11-03 - Refactored, added classes.
  2016-10-24 - Integrated loggers.
  2016-10-20 - Moved main function into source for this class.
  2016-10-19 - Started work on adding logging.
@@ -22,7 +23,6 @@
 // Project Specific classes
 #include "HistogramExtractor.h"
 #include "Logger.h"
-#include "RootFileManager.h"
 #include "TimeStamp.h"
 #include "TreeIterator.h"
 
@@ -51,10 +51,10 @@ class NtupleProcessor
     std::string options_;
 
     // File Information
+    std::string ntupleName_;
     std::vector<std::string> ntupleFileNames_;
     TChain* ntuples_;
     TreeIterator* tIter_;
-    RootFileManager* rfManager_;
 
     // Processing information
     Logger logger_;
