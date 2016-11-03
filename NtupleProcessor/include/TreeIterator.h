@@ -5,13 +5,14 @@
    TreeIterator
 
  Created : 2015-05-14  godshalk
- Modified: 2016-10-24  godshalk
+ Modified: 2016-11-03  godshalk
 
  Class inheritted from TSelector (from ROOT libraries). TSelector implementation
  documentation can be found at https://root.cern.ch/developing-tselector.
 
  Created to run over (chains of) Z+c Ntuple trees.
 
+ 2016-11-03 - Moved HistogramExtractor creation, termination to NtupleProcessor.
  2016-10-24 - Integrated global logger. Moved constructor into source.
  2016-10-19 - Started adding loggin functions.
 
@@ -35,7 +36,7 @@ typedef unsigned long counter;
 class TreeIterator : public TSelector
 {
   public:
-    TreeIterator();
+    TreeIterator(std::vector<HistogramExtractor*>&);
     virtual ~TreeIterator(){}
 
   // Overloaded TSelector Functions
@@ -66,18 +67,17 @@ class TreeIterator : public TSelector
       // Worker and client termination functions.
 
   private:
-  // Tree and Handler
     TTree *fChain;
     EventHandler* evt_;
-
-    Logger logger_;
-
     std::vector<HistogramExtractor*> hExtractors_;
 
   // Internal counters
     counter nEntries_;            // Total number of entries in chain
     counter finalEntry_;          // Index of last entry
     counter nEntriesProcessed_;   // Total number of events processed from chain
+
+    Logger logger_;
+
 
 };
 

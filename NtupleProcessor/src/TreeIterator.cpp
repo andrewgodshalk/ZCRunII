@@ -12,19 +12,20 @@ TreeIterator.cpp
 
 #include <iostream>
 #include "TreeIterator.h"
-#include "CutFlowTable.h"
 
 using std::string;
 
-TreeIterator::TreeIterator()
-  : fChain(0), logger_("NtupleProcessor", "[TI]   "), nEntries_(0), finalEntry_(0), nEntriesProcessed_(0)
+TreeIterator::TreeIterator(std::vector<HistogramExtractor*>& vHE)
+  : fChain(0), hExtractors_(vHE), nEntries_(0), finalEntry_(0), nEntriesProcessed_(0),
+    logger_("NtupleProcessor", "[TI]   ")
 {
     logger_.debug("TreeIterator Created.");
     evt_ = new EventHandler();
 
   // Set up histogram extractors
+    for( HistogramExtractor* h: hExtractors_ ) h->setEventHandler(evt_);
     // TO DO: Decide where to set these up, how to configure.
-    hExtractors_.push_back(new CutFlowTable(evt_));
+    // hExtractors_.push_back(new CutFlowTable(evt_));
 }
 
 void TreeIterator::Begin(TTree * /*tree*/){}
@@ -84,7 +85,7 @@ Bool_t TreeIterator::Process(Long64_t entry)
 
 void TreeIterator::SlaveTerminate()
 {
-    for( HistogramExtractor* h: hExtractors_ ) h->terminate();
+//    for( HistogramExtractor* h: hExtractors_ ) h->terminate();
 }
 
 void TreeIterator::Terminate(){}

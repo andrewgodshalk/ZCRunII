@@ -4,9 +4,11 @@
 # TO DO: ----
 
 LOGDIR := logs
+HISTDIR := output
 
 all: NtupleProcessor
 	@mkdir -p $(LOGDIR)
+	@mkdir -p $(HISTDIR)
 	make -C NtupleProcessor
 
 clean:

@@ -27,7 +27,8 @@
 class CutFlowTable : public HistogramExtractor
 {
   public:
-    CutFlowTable(EventHandler*);
+    // CutFlowTable(EventHandler*);
+    CutFlowTable();
     ~CutFlowTable(){}
 
     void process();     // Called per event. Processes information and fills histograms.
@@ -35,7 +36,7 @@ class CutFlowTable : public HistogramExtractor
 
   private:
     std::map<std::string, unsigned int> n_;   // Counts
-    unsigned int maxStringLength_;
+    // unsigned int maxStringLength_;
     Logger logger_;
 
     void printTable();  // Prints table to log.

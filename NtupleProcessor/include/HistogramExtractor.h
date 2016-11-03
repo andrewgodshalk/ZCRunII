@@ -20,14 +20,17 @@
 #include <TDirectory.h>
 #include <TH1.h>
 // Project Specific classes
+#include "EventHandler.h"
 #include "Logger.h"
 
 
 class HistogramExtractor {
   public:
-    HistogramExtractor(EventHandler* eh) : evt_(eh) {}
+    // HistogramExtractor(EventHandler* eh) : evt_(eh) {}
+    HistogramExtractor(){}
     virtual ~HistogramExtractor(){}
 
+    void setEventHandler(EventHandler* eh) { evt_ = eh; }
     virtual void process(){}     // Called per event. Processes information and fills histograms.
     virtual void terminate(){}   // Function that saves the histograms and performs any final actions before processing is completed.
 

@@ -7,8 +7,9 @@ CutFlowTable.cpp
 // Project Specific classes
 #include "CutFlowTable.h"
 
-CutFlowTable::CutFlowTable(EventHandler* e)
-  : HistogramExtractor(e), maxStringLength_(0),
+//CutFlowTable::CutFlowTable(EventHandler* e)
+CutFlowTable::CutFlowTable()
+  : // HistogramExtractor(e), maxStringLength_(0),
     logger_("NtupleProcessor", "[CF]       ")
 {
     logger_.debug("CutFlowTable created.");
@@ -30,9 +31,9 @@ void CutFlowTable::terminate()
 void CutFlowTable::printTable()
 {
   // Find max length of strings
-    for(auto &kv : n_)
-        if(kv.first.length() > maxStringLength_)
-            maxStringLength_ = kv.first.length();
+    // for(auto &kv : n_)
+    //     if(kv.first.length() > maxStringLength_)
+    //         maxStringLength_ = kv.first.length();
 
   // Print to log.
     logger_.info(" === Cut Flow Table ================");

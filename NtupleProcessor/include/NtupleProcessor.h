@@ -19,12 +19,12 @@
 #include <vector>
 // ROOT Libraries
 #include <TChain.h>
-// Submodules
-//#include "spdlog/spdlog.h"
 // Project Specific classes
+#include "HistogramExtractor.h"
 #include "Logger.h"
-#include "TreeIterator.h"
+#include "RootFileManager.h"
 #include "TimeStamp.h"
+#include "TreeIterator.h"
 
 typedef unsigned long counter;
 
@@ -38,7 +38,10 @@ class NtupleProcessor
 
   private:
     // Helper methods
-    bool processCommandLineInput(int, char*[]);
+    bool processCommandLineInput(int, char*[]);  // Processes command line options/flags.
+    void initializeHistogramExtractors();   // Sets up histogram extractors using input configuration files.
+    void initializeNtuples();               // Set up ntuples from file.
+    void processNtuples();                  // Process ntuples using tree iterator.
 
     // Command Line Input
     bool logQuiet_;
@@ -51,11 +54,14 @@ class NtupleProcessor
     std::vector<std::string> ntupleFileNames_;
     TChain* ntuples_;
     TreeIterator* tIter_;
+    RootFileManager* rfManager_;
 
     // Processing information
     Logger logger_;
     TimeStamp beginTime_;
     TimeStamp endTime_;
+
+    std::vector<HistogramExtractor*> hExtractors_;
 };
 
 #endif
