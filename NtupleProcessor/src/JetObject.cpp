@@ -19,5 +19,5 @@ JetObject::JetObject(EventMap* e, int i)
     vtxMass   (&(evt_->Jet_vtxMass  [index_])),
     logger_("NtupleProcessor", "[JO]       ")
 {
-    logger_.trace("JetObject created with index {}", index_);
+    //logger_.trace("JetObject created with index {}", index_);
 }

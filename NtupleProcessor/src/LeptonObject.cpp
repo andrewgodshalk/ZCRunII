@@ -18,5 +18,5 @@ LeptonObject::LeptonObject(EventMap* e, int i)
     pfRelIso04 (&(evt_->selLeptons_pfRelIso04[index_])),
     logger_("NtupleProcessor", "[LO]       ")
 {
-    logger_.trace("LeptonObject created with index {}", index_);
+    //logger_.trace("LeptonObject created with index {}", index_);
 }

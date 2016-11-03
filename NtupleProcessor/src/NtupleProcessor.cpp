@@ -34,6 +34,7 @@ int main(int argc, char* argv[])
   // Needed to make sure ROOT libraries "link correctly. Receive seg faults while trying to use TH2F in LeptonSFData otherwise.
   // Recommendation found at link: https://root.cern.ch/phpBB3/viewtopic.php?f=3&t=18101&p=76968#p76968
     //TApplication a("a", 0, 0); // just to make sure that the autoloading of ROOT libraries works
+    // Commented out again because it was causing problems on LPC. Seems to work okay for now.
 
   // Try/catch set up for the sole pupose of catching false return on
     try { NtupleProcessor nProc (argc, argv); }
@@ -51,6 +52,9 @@ NtupleProcessor::NtupleProcessor(int argc, char* argv[])
     beginTime_.update();
     if(!processCommandLineInput(argc, argv)) throw("help");
     //initializeLogging();
+    logger_.info("");
+    logger_.info("====================================================================================================");
+    logger_.info("===Initializing===");
     logger_.debug("NtupleProcessor Created.");
     tIter_ = new TreeIterator();
 
@@ -67,18 +71,30 @@ NtupleProcessor::NtupleProcessor(int argc, char* argv[])
     ntuples_ = new TChain("ntuples_", "Ntuples");
       // TO DO: Add ntuple names/labels/whatever as info for object.
     for(string fn : ntupleFileNames_)
-      ntuples_->Add(fn.c_str());
+    { ntuples_->Add(fn.c_str());
+      logger_.info("Adding ntuple file to chain: {}", fn);
+    }
 
     logger_.info("NtupleProcessor initizated {}", beginTime_.log_str());
     if(eventsToProcess_>0) logger_.info("Number of events to process: {}", eventsToProcess_);
 
   // Process the tree.
+    logger_.info("");
+    logger_.info("====================================================================================================");
+    logger_.info("===Beginning Event Processing===");
+
     if(eventsToProcess_>0) ntuples_->Process(tIter_, "", eventsToProcess_);
     else ntuples_->Process(tIter_);
 
+    logger_.info("");
+    logger_.info("===End Event Processing===");
+    logger_.info("====================================================================================================");
+
   // CLOSING OUTPUT.
     endTime_.update();
-    logger_.info("NtupleProcessor complete {}", endTime_.log_str());
+    logger_.info("");
+    logger_.info("===NtupleProcessor complete {}===", endTime_.log_str());
+    logger_.info("====================================================================================================");
 
   // Clean up
     delete ntuples_;
