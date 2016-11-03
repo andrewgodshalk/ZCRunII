@@ -14,8 +14,6 @@
 
 // Standard Libraries
 #include <vector>
-// Submodules
-#include "spdlog/spdlog.h"
 // Root Classes
 #include <TChain.h>
 // Project Specific classes
@@ -23,7 +21,6 @@
 #include "Logger.h"
 #include "JetObject.h"
 #include "LeptonObject.h"
-//#include "PhysicsObjects.h"
 
 class EventHandler
 {

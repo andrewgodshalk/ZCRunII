@@ -19,6 +19,7 @@
 
 // Standard Libraries
 #include <memory>
+#include <vector>
 // Submodules
 #include "spdlog/spdlog.h"
 // Root Classes
@@ -26,6 +27,7 @@
 #include <TSelector.h>
 // Project Specific classes
 #include "EventHandler.h"
+#include "HistogramExtractor.h"
 #include "Logger.h"
 
 typedef unsigned long counter;
@@ -69,6 +71,8 @@ class TreeIterator : public TSelector
     EventHandler* evt_;
 
     Logger logger_;
+
+    std::vector<HistogramExtractor*> hExtractors_;
 
   // Internal counters
     counter nEntries_;            // Total number of entries in chain

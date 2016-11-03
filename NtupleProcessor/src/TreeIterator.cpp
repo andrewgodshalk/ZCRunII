@@ -12,6 +12,7 @@ TreeIterator.cpp
 
 #include <iostream>
 #include "TreeIterator.h"
+#include "CutFlowTable.h"
 
 using std::string;
 
@@ -19,8 +20,11 @@ TreeIterator::TreeIterator()
   : fChain(0), logger_("NtupleProcessor", "[TI]   "), nEntries_(0), finalEntry_(0), nEntriesProcessed_(0)
 {
     logger_.debug("TreeIterator Created.");
-
     evt_ = new EventHandler();
+
+  // Set up histogram extractors
+    // TO DO: Decide where to set these up, how to configure.
+    hExtractors_.push_back(new CutFlowTable(evt_));
 }
 
 void TreeIterator::Begin(TTree * /*tree*/){}
@@ -71,24 +75,16 @@ Bool_t TreeIterator::Process(Long64_t entry)
   // Evaluate selection profiles.
     evt_->evaluateEvent();
 
-  // Call each HistogramMakers
-    // for each histomaker, histomaker->storeEvt()
-
-    // TEST
-    // logger_.debug("Event map test: nJet = {}", evt_->evtMap_.nJet);
-    // for (int i = 0; i < evt_->evtMap_.nJet; i++)
-    // {   logger_.debug("PhysicsObjects map test: evt_->evtMap_.Jet_pt[i] = {}", evt_->evtMap_.Jet_pt[i]   );
-    //     logger_.debug("PhysicsObjects map test: evt_->jets_[i].getPt()  = {}", evt_->jets_[i].getPt()    );
-    // }
-    // logger_.debug("Event map test: nselLeptons = {}", evt_->evtMap_.nselLeptons);
-    // for (int i = 0; i < evt_->evtMap_.nselLeptons; i++)
-    // {   logger_.debug("PhysicsObjects map test: evt_->evtMap_.selLeptons_pt[i] = {}", evt_->evtMap_.selLeptons_pt[i]   );
-    //     logger_.debug("PhysicsObjects map test: evt_->leptons_[i].getPt()      = {}", evt_->leptons_[i].getPt()    );
-    // }
+  // Call each HistogramExtractors
+    for( HistogramExtractor* h: hExtractors_ ) h->process();
 
     nEntriesProcessed_++;
     return true;
 }
 
-void TreeIterator::SlaveTerminate(){}
+void TreeIterator::SlaveTerminate()
+{
+    for( HistogramExtractor* h: hExtractors_ ) h->terminate();
+}
+
 void TreeIterator::Terminate(){}
