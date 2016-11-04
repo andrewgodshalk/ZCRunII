@@ -70,7 +70,7 @@ Bool_t TreeIterator::Process(Long64_t entry)
     fChain->GetTree()->GetEntry(entry);
 
   // Set up status outputs
-    logger_.trace("#{}:", nEntriesProcessed_);
+    //logger_.trace("#{}:", nEntriesProcessed_);
     if(nEntriesProcessed_%100000 == 0 || nEntriesProcessed_==finalEntry_) logger_.info("#{}", nEntriesProcessed_);
 
   // Evaluate selection profiles.

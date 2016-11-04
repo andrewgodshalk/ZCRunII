@@ -50,7 +50,7 @@ class HistogramExtractor {
     RootFileManager* rfManager_;    // Manages output file where histograms are stored.
 
   // Histogram collection
-//    std::map<TString, TH1*> h;   // List of histograms that will be filled by the fillHistos function
+    std::map<std::string, TH1*> histograms_;   // List of histograms that will be filled by the fillHistos function
 
 };
 

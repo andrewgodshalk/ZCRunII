@@ -17,7 +17,6 @@
 // Standard Libraries
 #include <map>
 #include <string>
-#include <vector>
 // Root Classes
 #include <TFile.h>
 #include <TH1.h>
@@ -42,8 +41,8 @@ class RootFileManager
     std::string filePath_;
     TFile* file_;
 
-    std::map<TH1F*> histograms_;       // Map of histograms, keyed by their names.
-    std::vector<std::string> hProps_;  // Vector initialized at runtime to store histogram properties read in from a configuration string.
+    std::map<std::string, TH1*> histograms_;   // Map of histograms, keyed by their names.
+    std::vector<std::string> hProps_;          // Vector initialized at runtime to store histogram properties read in from a configuration string.
 
     Logger logger_;
 };

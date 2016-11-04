@@ -15,6 +15,10 @@ CutFlowTable::CutFlowTable(string n)
     logger_("NtupleProcessor", "[CF]     ")
 {
     logger_.debug("CutFlowTable created.");
+
+  // Create histogram:
+    TH1* htemp = rfManager_->createHistogram("CFT_Zll_cutFlow ; Cut Flow Table (Zll); Cuts ;; 1 ; 0 ; 10 ;     int  ; OPTIONLISTING");
+    histograms_[htemp->GetName()] = htemp;
 }
 
 void CutFlowTable::process()

@@ -25,7 +25,7 @@ void EventHandler::mapTree(TTree* tree)
 
 void EventHandler::evaluateEvent()
 { // Use tree map to set up physics objects
-    logger_.trace("evaluateEvent(): called");
+    //logger_.trace("evaluateEvent(): called");
 
     // Take variables from EventMap, input into this class.
     // Variables that don't need any modification
