@@ -33,6 +33,9 @@ class EventHandler
 
     EventMap evtMap_;
 
+  // Calculated Event Values.
+    float wt_;  // Combined weight of the event. Defaults to 1.0.
+
   // Array variables mapped to objects.
     std::vector<   JetObject> jets_   ;
     std::vector<LeptonObject> leptons_;
@@ -42,7 +45,7 @@ class EventHandler
 
   // Helper function to set up physics object lists
     void mapPhysicsObjects();
-
+    void resetEventVariables();
 
 };
 

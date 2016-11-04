@@ -38,7 +38,7 @@ class CutFlowTable : public HistogramExtractor
     void terminate();   // Function that saves the histograms and performs any final actions before processing is completed.
 
   private:
-    std::map<std::string, unsigned int> n_;   // Counts
+    std::map<std::string, float> n_;   // Counts
     Logger logger_;
 
     void printTable();  // Prints table to log.

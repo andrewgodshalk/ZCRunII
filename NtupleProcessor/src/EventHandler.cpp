@@ -26,7 +26,8 @@ void EventHandler::mapTree(TTree* tree)
 void EventHandler::evaluateEvent()
 { // Use tree map to set up physics objects
     //logger_.trace("evaluateEvent(): called");
-
+  // Reset working variables.
+    resetEventVariables();
     // Take variables from EventMap, input into this class.
     // Variables that don't need any modification
     // Variables that are mapped onto structs (jets, leptons)
@@ -37,4 +38,9 @@ void EventHandler::mapPhysicsObjects()
     logger_.trace("mapPhysicsObjects(): called");
     for (size_t i = 0; i < EventMap::maxNumJets_; i++)    jets_.push_back(   JetObject(&evtMap_, i));
     for (size_t i = 0; i < EventMap::maxNumLeps_; i++) leptons_.push_back(LeptonObject(&evtMap_, i));
+}
+
+void EventHandler::resetEventVariables()
+{ // Called at beginning of evaluateEvent() to reset calculated variables to their initial, default values.
+    wt_ = 1.0;
 }

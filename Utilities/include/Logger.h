@@ -7,11 +7,15 @@
   Created:  2016-10-?
   Modified: 2016-10-?
 
-  Class adapted from old timestamp functions.
+  Wrapper for spdlog library: https://github.com/gabime/spdlog
+  Fomatting for spdlog is drawn from fmt library: https://github.com/fmtlib/fmt
+  Formatting syntax almost identical to printf syntax (http://www.cplusplus.com/reference/cstdio/printf/),
+    the main exception being that the preceeding ("%4.2f") is replaced with
+    curly brackets ("{4.2f}").
 
   To do:
-  - Find some way to make debug output a standard length (see specification
-    in NtupleProcessor.cpp :: processCommandLineInput())
+  - Find some way to make debug output prefix a standard length (see
+      specification in NtupleProcessor.cpp :: processCommandLineInput())
   - Implement indentation levels?
 
 ------------------------------------------------------------------------------*/

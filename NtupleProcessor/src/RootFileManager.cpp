@@ -73,7 +73,7 @@ void RootFileManager::close()
 bool RootFileManager::getHistoPropsFromString(const string& cfgStr)
 { // Pulls histogram properties from the input string, stores in properties vector.;
   // Configuration string formats:
-  // <name> ;<title> ;<xlabel> ;<ylabel> ;<binsize> ;<min> ;<max> [;<type>] [;other options]
+  // <name> ,<title> ,<xlabel> ,<ylabel> ,<binsize> ,<min> ,<max> [,<type>] [,other options][,]
   // - type float by default. Can also say int.
   // - properties are delimited by semicolons.
   // - extra space before or after the semicolon will be ignored.
@@ -89,7 +89,7 @@ bool RootFileManager::getHistoPropsFromString(const string& cfgStr)
 
     while(propBegin!=strEnd) // Until the end of the string has been met...
     { // Locate the boundaries of the next property substring.
-        propEnd     = find(       propBegin,  strEnd,     ';'); // Find the end of the current property listing.
+        propEnd     = find(       propBegin,  strEnd,     ','); // Find the end of the current property listing.
         substrBegin = find_if_not(propBegin, propEnd, isspace); // Find the first non-whitespace character to begin the propery.
         substrEnd   = find_if_not( str_rciter(propEnd), str_rciter(substrBegin), isspace).base();
           // Find the last non-whitespace character, the end of the property substring
