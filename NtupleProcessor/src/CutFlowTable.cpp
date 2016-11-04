@@ -15,11 +15,6 @@ CutFlowTable::CutFlowTable(string n)
     logger_("NtupleProcessor", "[CF]     ")
 {
     logger_.debug("CutFlowTable created.");
-
-  // Create histogram:
-    // TH1* htemp = rfManager_->createHistogram("CFT_Zll_cutFlow ; Cut Flow Table (Zll); Cuts ;; 1 ; 0 ; 10 ;     int  ; OPTIONLISTING");
-    // histograms_[htemp->GetName()] = htemp;
-  // MOVED TO TERMINATE.
 }
 
 void CutFlowTable::process()
@@ -35,6 +30,8 @@ void CutFlowTable::process()
 
 void CutFlowTable::terminate()
 { // Function that saves the histograms and performs any final actions before processing is completed.
+    logger_.trace("terminate() called.");
+
   // Create histogram
     int hSize = n_.size();
     string hConfigStr = string("CFT_Zll_cutFlow, Cut Flow Table (Zll), Cuts, Counts, 1, 0,")+to_string(hSize);
@@ -52,7 +49,6 @@ void CutFlowTable::terminate()
     htemp->SetOption("TEXT45");
 
   // Perform closeout.
-    logger_.trace("terminate() called.");
     printTable();
     rfManager_->close();
 }

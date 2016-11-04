@@ -18,6 +18,7 @@ NtupleProcessor.cpp
 // ROOT Libraries
 //#include "TApplication.h"
 // Project Specific classes
+#include "ControlPlotExtractor.h"
 #include "CutFlowTable.h"
 #include "NtupleProcessor.h"
 #include "TimeStamp.h"
@@ -167,4 +168,5 @@ void NtupleProcessor::initializeHistogramExtractors()
     logger_.trace("initializeHistogramExtractors() called.");
 
     hExtractors_.push_back(new CutFlowTable(ntupleName_));
+    hExtractors_.push_back(new ControlPlotExtractor(ntupleName_));
 }

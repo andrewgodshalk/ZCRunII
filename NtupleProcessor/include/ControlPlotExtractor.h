@@ -1,18 +1,15 @@
-#ifndef GUARD_CutFlowTable_h
-#define GUARD_CutFlowTable_h
+#ifndef GUARD_ControlPlotExtractor_h
+#define GUARD_ControlPlotExtractor_h
 
 /*------------------------------------------------------------------------------
-   CutFlowTable Class
+   ControlPlotExtractor Class
 
- Created : 2016-11-02  godshalk
+ Created : 2016-11-04  godshalk
  Modified: 2016-11-04  godshalk
 
- Inherits from HistogramExtractor. Counts events passing each step of selection.
- Outputs counts to histogram.
+ TEXT HERE
 
- 2016-11-04 - Set up histogram output.
-            - Set up automatic length formatting on printTable()
- 2016-11-02 - Set up with basic log output of counts.
+ 2016-11-03
 
 ------------------------------------------------------------------------------*/
 
@@ -27,12 +24,11 @@
 #include "Logger.h"
 
 
-class CutFlowTable : public HistogramExtractor
+class ControlPlotExtractor : public HistogramExtractor
 {
   public:
-    // CutFlowTable(EventHandler*);
-    CutFlowTable(std::string);
-    ~CutFlowTable(){}
+    ControlPlotExtractor(std::string);
+    ~ControlPlotExtractor(){}
 
     void process();     // Called per event. Processes information and fills histograms.
     void terminate();   // Function that saves the histograms and performs any final actions before processing is completed.
@@ -40,9 +36,6 @@ class CutFlowTable : public HistogramExtractor
   private:
     std::map<std::string, float> n_;   // Counts
     Logger logger_;
-
-    void printTable();  // Prints table to log.
-
 };
 
 #endif
