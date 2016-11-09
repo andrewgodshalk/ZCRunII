@@ -29,25 +29,31 @@
 
 class HistogramExtractor {
   public:
-    HistogramExtractor(std::string n, std::string c, std::string s)
-     : ntupleName_(n), className_(c), selectionProfile_(s)
+    HistogramExtractor(std::string n, std::string c, std::string s = "")
+     : ntupleName_(n), className_(c), selectionProfileStr_(s)
     {
       // Set up RootFileManager
-      std::string fileName = className_ + "_" + ntupleName_ + "_" + selectionProfile_ + ".root";
-      rfManager_ = new RootFileManager(fileName);
+        std::string fileName = className_ + "_" + ntupleName_ + "_" + selectionProfileStr_ + ".root";
+        rfManager_ = new RootFileManager(fileName);
     }
     virtual ~HistogramExtractor(){}
 
-    void setEventHandler(EventHandler* eh) { evt_ = eh; }
+    void setEventHandler(EventHandler* eh)
+    { // Set up HE's links to EH, including the link to its specified SP.
+        evt_ = eh;
+        selectionProfile_ = evt_->getSelectionProfile(selectionProfileStr_);
+    }
+
     virtual void process(){}     // Called per event. Processes information and fills histograms.
     virtual void terminate(){}   // Function that saves the histograms and performs any final actions before processing is completed.
 
   protected:
     std::string ntupleName_;
-    std::string className_;         // Name of this histogram extractor class.
-    std::string selectionProfile_;  // Base selection profile used for histogram collection.
-    EventHandler* evt_;             // Contains event information (selection profile, mapped variables, etc.)
-    RootFileManager* rfManager_;    // Manages output file where histograms are stored.
+    std::string className_;            // Name of this histogram extractor class.
+    std::string selectionProfileStr_;  // Base selection profile used for histogram collection.
+    EventHandler* evt_;                // Contains event information (selection profile, mapped variables, etc.)
+    RootFileManager* rfManager_;       // Manages output file where histograms are stored.
+    SelectionProfile* selectionProfile_;
 
   // Histogram collection
     std::map<std::string, TH1*> histograms_;   // List of histograms that will be filled by the fillHistos function

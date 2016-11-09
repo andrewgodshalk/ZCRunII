@@ -11,7 +11,7 @@ using std::string;
 using std::to_string;
 
 CutFlowTable::CutFlowTable(string n)
-  : HistogramExtractor(n, "CFT", "Zll"),
+  : HistogramExtractor(n, "CFT", "Zllf071c111Le24sfn"),
     logger_("NtupleProcessor", "[CF]     ")
 {
     logger_.debug("CutFlowTable created.");

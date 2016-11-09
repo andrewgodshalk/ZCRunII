@@ -7,8 +7,15 @@ EventHandler.cpp
 */
 
 // Standard Libraries
+#include <string>
+#include <vector>
+// Root Classes
+#include <TChain.h>
 // Project Specific
 #include "EventHandler.h"
+
+using std::string;
+using std::vector;
 
 EventHandler::EventHandler() :
   evtMap_(), logger_("NtupleProcessor", "[EH]   ")
@@ -25,12 +32,16 @@ void EventHandler::mapTree(TTree* tree)
 
 void EventHandler::evaluateEvent()
 { // Use tree map to set up physics objects
-    //logger_.trace("evaluateEvent(): called");
+    logger_.trace("evaluateEvent(): called");
+
   // Reset working variables.
     resetEventVariables();
-    // Take variables from EventMap, input into this class.
-    // Variables that don't need any modification
-    // Variables that are mapped onto structs (jets, leptons)
+
+  // Evaluate SelectionProfiles.
+    for( auto &kv : selectionProfiles_)
+    {   logger_.trace("Evaluating selection profile: {}", kv.first);
+        kv.second->evaluateEvent(this);
+    }
 }
 
 void EventHandler::mapPhysicsObjects()
@@ -42,5 +53,30 @@ void EventHandler::mapPhysicsObjects()
 
 void EventHandler::resetEventVariables()
 { // Called at beginning of evaluateEvent() to reset calculated variables to their initial, default values.
+  // Reset event weight.
     wt_ = 1.0;
+  // Reset vectors containing valid object pointers.
+    for( auto &kv : lepCriteria_) kv.second.clear();
+}
+
+SelectionProfile* EventHandler::getSelectionProfile(std::string spStr)
+{ // Returns a pointer to an SP. If it doesn't exist, it creates it based on the given string.
+    logger_.debug("getSelectionProfile() called for {}", spStr);
+
+  // If the SP doesn't exist, create it.
+    if(!selectionProfiles_.count(spStr))
+    {   logger_.debug("Key not found in list of SPs. Creating new SP({})", spStr);
+        selectionProfiles_[spStr] = new SelectionProfile(spStr);
+
+      // If the specified lepton criteria isn't already stored, store it.
+        string newLepCrit = selectionProfiles_[spStr]->getLeptonCriteria();
+        if(!lepCriteria_.count(newLepCrit))
+        {   logger_.debug("Adding Lepton Criteria to lepCriteria_: {}", newLepCrit);
+            lepCriteria_[newLepCrit] = vector<LeptonObject*>(0);
+        }
+    }
+
+  // Return pointer to SP in list.
+    return selectionProfiles_[spStr];
+
 }

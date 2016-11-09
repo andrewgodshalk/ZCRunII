@@ -11,7 +11,7 @@ using std::string;
 using std::to_string;
 
 ControlPlotExtractor::ControlPlotExtractor(string n)
-  : HistogramExtractor(n, "CPT", "Zll"),
+  : HistogramExtractor(n, "CPT", "Zllf071c111Lp20e24id3iso2sf1"),
     logger_("NtupleProcessor", "[CP]     ")
 {
     logger_.debug("ControlPlotExtractor created.");
