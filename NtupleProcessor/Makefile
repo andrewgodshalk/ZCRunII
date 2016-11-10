@@ -5,7 +5,8 @@
 # - Figure out a good way to add dependancies to utility classes.
 # - Figure out best way to include header files in dependancies.
 
-CC := g++
+#CC := g++
+CC := g++-4.9
 SRCDIR := src
 HDRDIR := include
 BUILDDIR := build
