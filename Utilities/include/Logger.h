@@ -5,7 +5,7 @@
   Logger class
 
   Created:  2016-10-?
-  Modified: 2016-10-?
+  Modified: 2016-11-21
 
   Wrapper for spdlog library: https://github.com/gabime/spdlog
   Fomatting for spdlog is drawn from fmt library: https://github.com/fmtlib/fmt
@@ -17,6 +17,8 @@
   - Find some way to make debug output prefix a standard length (see
       specification in NtupleProcessor.cpp :: processCommandLineInput())
   - Implement indentation levels?
+
+  2016-11-21 - Added option to set usage for testing (no file output).
 
 ------------------------------------------------------------------------------*/
 
@@ -30,24 +32,26 @@
 class Logger
 {
   public:
-    Logger(const char* ln, const std::string& pfx = "")
-      : logName_(ln), logPrefix_(pfx), logFormat_("%v"), fileName_(ln)
-    { // If logger not in registry, create logger.
-      // Set up file name and location.
-
-      // Check for existing logger with same name.
+    Logger( const char* ln,               // Name of the logger. Used as fileName unless otherwise specified.
+            const std::string& pfx = "",  // Prefix output at beginning of line in log file.
+            const std::string& fn = "",   // File name for file output.
+            const std::string& fp = ""    // Path of file output.
+          ) : logName_(ln), logPrefix_(pfx), logFormat_("%v"), fileName_(fn), logDir_(fp)
+    { // Check for existing logger with same name.
         logger_ = spdlog::get(logName_);
 
       // Create logger if logger not found.
         if(!logger_)
         {   try
-            { // Create sinks (outputs) for loggers
-                std::string logDir = "logs/";
-                fileName_ += "_";
-                fileName_ += TimeStamp().fn_str() + ".log";
-                sinks.push_back(std::make_shared<spdlog::sinks::simple_file_sink_st>((logDir+fileName_).c_str()));
+            { // Set up file name and location.
+                if(logDir_=="") logDir_ = "logs/";
+                if(fileName_=="") fileName_ = logName_;
+                if(fileName_ != "NULL") fileName_ += "_" + TimeStamp().fn_str() + ".log";
+
+              // Create sinks (outputs) for loggers
                 sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_st>());
                 sinks.push_back(std::make_shared<spdlog::sinks::stderr_sink_st>());
+                if(fileName_ != "NULL") sinks.push_back(std::make_shared<spdlog::sinks::simple_file_sink_st>((logDir_+fileName_).c_str()));
 
               // Create logger, to be accessed globally from all classes.
                 logger_ = std::make_shared<spdlog::logger>(logName_.c_str(), begin(sinks), end(sinks));
@@ -55,8 +59,8 @@ class Logger
               // Set logger and sink levels.
                 logger_ ->set_level(spdlog::level::info);
                 sinks[0]->set_level(spdlog::level::info);
-                sinks[1]->set_level(spdlog::level::info);
-                sinks[2]->set_level(spdlog::level::err );
+                sinks[1]->set_level(spdlog::level::err );
+                if(fileName_ != "NULL") sinks[2]->set_level(spdlog::level::info);
 
               // Set attributes and register logger in global list
                 setFormat(logFormat_);
@@ -88,21 +92,21 @@ class Logger
         if(dbg)
         {
             logger_ ->set_level(spdlog::level::trace);
-            sinks[0]->set_level(spdlog::level::trace);
-            sinks[1]->set_level(spdlog::level::debug);
+            sinks[0]->set_level(spdlog::level::debug);
+            if(fileName_ != "NULL") sinks[2]->set_level(spdlog::level::trace);
         }
         else
         {
             logger_ ->set_level(spdlog::level::info);
-            sinks[0]->set_level(spdlog::level::info);
             sinks[1]->set_level(spdlog::level::info);
+            if(fileName_ != "NULL") sinks[2]->set_level(spdlog::level::info);
         }
     }
 
     void setQuiet(bool qt = true)
     { // Sets stdout sink to print only on error
-        if(qt) sinks[1]->set_level(spdlog::level::err );
-        else   sinks[1]->set_level(spdlog::level::info);
+        if(qt) sinks[0]->set_level(spdlog::level::err );
+        else   sinks[0]->set_level(spdlog::level::info);
     }
 
     // Functions that pass along messages to logger.
@@ -120,7 +124,7 @@ class Logger
     std::string logPrefix_;
     std::string logFormat_;
     std::string fileName_;
-
+    std::string logDir_;
 };
 
 #endif

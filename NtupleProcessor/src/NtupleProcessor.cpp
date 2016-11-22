@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 NtupleProcessor.cpp
  Created : 2015-09-14  godshalk
- Modified: 2016-10-24  godshalk
+ Modified: 2016-11-21  godshalk
 ------------------------------------------------------------------------------*/
 
 // Standard Libraries
@@ -21,7 +21,6 @@ NtupleProcessor.cpp
 #include "ControlPlotExtractor.h"
 #include "CutFlowTable.h"
 #include "NtupleProcessor.h"
-#include "TimeStamp.h"
 
 
 using std::cout;     using std::endl;
