@@ -15,6 +15,7 @@
 ------------------------------------------------------------------------------*/
 
 // Standard Libraries
+#include <map>
 #include <regex>
 #include <string>
 #include <utility>
@@ -35,14 +36,13 @@ class SelectionProfile
 
     bool evaluateEvent(EventHandler*, std::string options = "");
     std::string getLeptonCriteria();
-    bool setCriteria(std::string&, std::string&);
-    bool setJSON             (std::string&);
-    bool setDileptonCriteria (std::string&);
-    bool setLeptonCriteria   (std::string&);
-    bool setTriggerCriteria  (std::string&);
-    bool setJetCriteria      (std::string&);
-    bool setMETCriteria      (std::string&);
-    bool setHFTaggingCriteria(std::string&);
+    bool setCriteria(const std::string&, const std::string&);
+    bool setJSON             (const std::string&);
+    bool setDileptonCriteria (const std::string&);
+    bool setLeptonCriteria   (const std::string&);
+    bool setJetCriteria      (const std::string&);
+    bool setMETCriteria      (const std::string&);
+    bool setHFTaggingCriteria(const std::string&);
 
   // Selection Criteria, input from intializing string.
     bool inJSON_;
@@ -80,7 +80,8 @@ class SelectionProfile
     const static std::string defaultProfile_;
     static std::vector<std::pair<const std::string, const std::string> > defaultObjectCriteria_;
       // map of object/criteria pairs. Use vector<pair> instead of map for the sake of ordering.
-    static std::vector<std::vector<std::regex> > criteriaRegex_;
+    // static std::map<std::string, std::regex>     criteriaRegex_;
+    static std::vector<std::vector<std::regex> > criteriaRegexSeparated_;
 };
 
 #endif
