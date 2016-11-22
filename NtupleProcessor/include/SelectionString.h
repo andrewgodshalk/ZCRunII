@@ -45,6 +45,8 @@ class SelectionString
 
   // Static default value for SelectionString
     const static std::string defaultStr_;
+  // Variables for processing string.
+    static std::vector<std::string> objects_;
     static std::map<std::string, std::pair<std::size_t, std::size_t> > objectSubstrRange_;
 
     Logger logger_;
