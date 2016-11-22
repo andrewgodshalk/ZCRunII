@@ -23,8 +23,8 @@ using std::regex;
 using std::string;
 using std::vector;
 
-// Define default selection profile and object criteria
-//const string SelectionProfile::defaultProfile_ = "Zllf0070c0110ncLp20e21id3iso2sfcJ0p30e25jeccflvaMETptf0pfHF0NoHFsfn";
+// Define default selection profile and object criteria (see doc/SelectionProfile_format.txt)
+//const string SelectionProfile::defaultProfile_ = "jgZllf0070c0110ncLp20e21id3iso2sfcJ0sip30e25jeccflvaMETptc0000tpfHF0iNoHFSVnsfn";
 const string SelectionProfile::defaultProfile_ = "j1Zllf70c110ncLp20e21id3iso2sfc";
 vector<pair<const string, const string>> SelectionProfile::defaultObjectCriteria_ =
 { {  "j", "j1"               },
