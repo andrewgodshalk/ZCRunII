@@ -19,7 +19,7 @@ SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 ROOTFLAGS=`root-config --cflags --glibs`
 BOOSTLIB := -lboost_program_options
-CFLAGS := -g -Wall $(BOOSTLIB) $(ROOTFLAGS)
+CFLAGS := -g -Wall -std=c++11 $(BOOSTLIB) $(ROOTFLAGS)
 INC := -I $(HDRDIR) -I ../spdlog/include/ -I ../Utilities/include/
 
 $(TARGET): $(OBJECTS)
@@ -40,7 +40,7 @@ tester:
 	$(CC) $(CFLAGS) test/tester.cpp $(INC) $(LIB) -o bin/tester
 
 # Spikes
-ticket:
-	$(CC) $(CFLAGS) spikes/ticket.cpp $(INC) $(LIB) -o bin/ticket
+regexSPTest:
+	$(CC) $(CFLAGS) spike/regexSPTest/main.cpp $(INC) $(LIB) -o bin/regexSPTest
 
 .PHONY: clean
