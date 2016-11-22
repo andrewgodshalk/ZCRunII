@@ -24,16 +24,16 @@ using std::string;
 using std::vector;
 
 // Define default selection profile and object criteria (see doc/SelectionProfile_format.txt)
-//const string SelectionProfile::defaultProfile_ = "jgZllf0070c0110ncLp20e21id3iso2sfcJ0sip30e25jeccflvaMETptc0000tpfHF0iNoHFSVnsfn";
-const string SelectionProfile::defaultProfile_ = "j1Zllf70c110ncLp20e21id3iso2sfc";
-vector<pair<const string, const string>> SelectionProfile::defaultObjectCriteria_ =
-{ {  "j", "j1"               },
-  {  "Z", "Zllf0070c0110nc"  },
-  {  "L", "Lp20e21id3iso2sfc"},
-  {  "J", "J0p30e25jecc"     },
-  {"MET", "METptf0ptc9999pf" },
-  { "HF", "HFNoHFsfn"        },
-};
+//const string SelectionProfile::defaultProfile_ = "j1Zllf70c110ncLp20e21id3iso2sfc";
+const string SelectionProfile::defaultProfile_ = "jgZllf0070c0110ncLp20e21id3iso2sfcJ0sip30e25jeccflvaMETptc0000tpfHF0iNoHFSVnsfn";
+// vector<pair<const string, const string>> SelectionProfile::defaultObjectCriteria_ =
+// { {  "j", "j1"               },
+//   {  "Z", "Zllf0070c0110nc"  },
+//   {  "L", "Lp20e21id3iso2sfc"},
+//   {  "J", "J0p30e25jecc"     },
+//   {"MET", "METptf0ptc9999pf" },
+//   { "HF", "HFNoHFsfn"        },
+// };
 
 
 // WHEN IMPLEMENTING, LOOK AT SUBMATCHING AT http://www.cplusplus.com/reference/regex/ECMAScript/
@@ -46,29 +46,30 @@ vector<pair<const string, const string>> SelectionProfile::defaultObjectCriteria
 //   {  "HF", regex("HF(NoHF|CSV[LMTS]|CTAG)(sf[nudc])?")                     },
 // };
 
-vector<vector<regex> > SelectionProfile::criteriaRegexSeparated_ =
-{ {/*   j */ regex("[01]") },
-  {/*   Z */ regex("(ll|ee|eu|ue|uu)"), regex("f[0-9]+"), regex("c[0-9]+"), regex("[rn]c") },
-  {/*   L */ regex("p[0-9]+"), regex("e[0-9]+"), regex("id[0123]"), regex("iso[012]"), regex("sf[nudc]") },
-  {/*   J */ regex("[0-4]"), regex("p[0-9]+"), regex("e[0-9]+"), regex("jec[nudc]"),  },
-  {/* MET */ regex("ptf[0-9]+"), regex("pf") },
-  {/*  HF */ regex("(NoHF|CSV[LMTS]|CTAG)"), regex("sf[nudc]") },
-};
+// vector<vector<regex> > SelectionProfile::criteriaRegexSeparated_ =
+// { {/*   j */ regex("[01]") },
+//   {/*   Z */ regex("(ll|ee|eu|ue|uu)"), regex("f[0-9]+"), regex("c[0-9]+"), regex("[rn]c") },
+//   {/*   L */ regex("p[0-9]+"), regex("e[0-9]+"), regex("id[0123]"), regex("iso[012]"), regex("sf[nudc]") },
+//   {/*   J */ regex("[0-4]"), regex("p[0-9]+"), regex("e[0-9]+"), regex("jec[nudc]"),  },
+//   {/* MET */ regex("ptf[0-9]+"), regex("pf") },
+//   {/*  HF */ regex("(NoHF|CSV[LMTS]|CTAG)"), regex("sf[nudc]") },
+// };
 
 
 // Intended constructor: Creates an object mapped to the variables at the 'i'th index of the given event's arrays.
 SelectionProfile::SelectionProfile(string str)
-  : profileStr_(str), fullProfileStr_(""),
+  : //profileStr_(str), fullProfileStr_(""),
+    selStr_(str),
     logger_("NtupleProcessor", "[SP]       ")
 {
-    logger_.trace("SelectionProfile initialized: {}", profileStr_);
+    logger_.trace("SelectionProfile initialized: {}", selStr_.truncated());
 
-  // Set object criteria to the default values.
+/*  // Set object criteria to the default values.
     for( auto &kv : defaultObjectCriteria_) objectCriteria_[kv.first] = kv.second;
 
   // Set up SP object based on input SP string. Set validity based on success.
     valid_ = processProfileString();
-
+*/
 }
 
 bool SelectionProfile::evaluateEvent(EventHandler *evt, string options)
@@ -78,7 +79,7 @@ bool SelectionProfile::evaluateEvent(EventHandler *evt, string options)
     // Evaluate Leptons.
     return true;
 }
-
+/*
 string SelectionProfile::getLeptonCriteria()
 {
     return objectCriteria_["L"];
@@ -182,3 +183,4 @@ bool SelectionProfile::processProfileString()
 
     return processingSuccessfulSoFar;
 }
+*/

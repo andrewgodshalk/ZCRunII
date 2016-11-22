@@ -1,3 +1,7 @@
+jg Zllf0070c0110nc Lp20e21id3iso2sfc J0sip30e25jeccflva METptc0000tpf HF0iNoHFSVnsfn
+01 234567890123456 78901234567890123 456789012345678901 2345678901234 56789012345678
+0          1          2         3          4         5          6          7
+
 
 Default: Z = jgZllf0070c0110ncLp20e21id3iso2sfcJ0sip30e25jeccflvaMETptc0000tpfHF0iNoHFSVnsfn
              [jg] [Zllf0070c0110nc] [Lp20e21idtisotsfc] [J0si0tip30e25jeccflva] [METptc0000tpf] [HF0iNoHFSVnsfn]
