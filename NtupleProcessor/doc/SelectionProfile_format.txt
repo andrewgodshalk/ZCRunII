@@ -1,0 +1,56 @@
+
+Default: Z = jgZllf0070c0110ncLp20e21id3iso2sfcJ0sip30e25jeccflvaMETptc0000tpfHF0iNoHFSVnsfn
+             [jg] [Zllf0070c0110nc] [Lp20e21idtisotsfc] [J0si0tip30e25jeccflva] [METptc0000tpf] [HF0iNoHFSVnsfn]
+             j[g] Z[ll][f0070][c0110][nc] L[p20][e21][id3][iso2][sfc] J[0si][p30][e25][jecc][flva] MET[c0000][tpf] HF[0i][NoHF][SVn][sfn]
+Minimum: "Z"
+Example of standard selection for templates: ZJ1METc40HF1CSVTsfc
+
+JSON
+Default: "" = "jg"
+j[g]
+ [g] = g|s|n = gold, silver, or no JSON.
+
+[Dilepton]
+Default: "Z" = "Zllf0070c0110rc"
+Z[ll][f0070][c0110][nc]
+  [ll] = lepton makeup (uu, ee, eu, ll=uu+ee)
+  [f0070c0110] = invmass range (default is 70 to 110)
+  [rc] = rochester correction. (n|c|u|d = none, central, up, down)
+Notes: Could change to V, or specify Z and W selections separately...
+
+[Leptons] - https://twiki.cern.ch/twiki/bin/viewauth/CMS/MuonPOG
+Default "" = "Lp20e21id3iso2sfc"
+L[p20][e21][idt][isot][sfc]
+  [p20]  = pt minimum
+  [e21]  = |eta| max *10
+  [id3]  = id level (n|l|m|t = none,loose,medium,tight)
+  [iso2] = iso level (n|l|t = none,loose,tight)
+  [sfc]  = lepton scale factors (n|c|u|d = none, central, up, down)
+Notes: Electron and Muon should have same set of preferences. Will need to double check, though.
+     - Could always specify LM or LE separately...
+
+[JETS]
+Default: "" = "J0si0tip30e25jeccflva"
+J[0si][0ti][p30][e25][jecc][flva]
+  [0si] = selected jets. Number by itself is assumed to be selected. i|e = inclusive/exclusive
+  [0ti] = truth (lhe) jets. i|e = inclusive/exclusive
+  [p30] = min pt
+  [e25] = max |eta|
+  [jecc] = jet energy correction (n|c|u|d = none, central, up, down)
+  [flva] = event flavor to select. a|b|c|l = Z+any|b|c|light event.
+
+[MET]
+Default: "" = "METc0000tpf"
+MET[c0000][tpf]
+  [MET] - If not listed, no MET selection is done.
+  [c40] = max(ceiling) pt
+  [f40] = min(floor) pt (not implemented)
+  [tpf] = type of MET
+
+[HF & SVT]
+Default: "" = HF0iNoHFSVnsfn
+HF[0i][NoHF][SVn][sfn]
+  [0i] = number of HF jets (i|e = inclusive,exclusive)
+  [NoHF] = tag. CSVL/M/T/S, NoHF, CTAG, etc.
+  [SVn] = Secondary Vertex used for tagging. (n = none, c = corrected, u = uncorrected)
+  [sfc] = scale factor settings. c = central value applied, u/d = error up/down
