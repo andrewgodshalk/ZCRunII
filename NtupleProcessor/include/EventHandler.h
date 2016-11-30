@@ -46,7 +46,7 @@ class EventHandler
     std::vector<LeptonObject> leptons_;
 
   private:
-    Logger   logger_;
+    Logger logger_;
 
   // List of selection profiles to evaulate each event.
     // std::map<std::string, SelectionProfile*> selectionProfiles_;

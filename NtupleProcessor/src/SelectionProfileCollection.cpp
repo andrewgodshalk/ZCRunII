@@ -9,6 +9,8 @@ SelectionProfileCollection.cpp
 // Project Specific classes
 #include "SelectionProfileCollection.h"
 
+using std::string;
+
 // CONSTRUCTOR
 SelectionProfileCollection::SelectionProfileCollection()
   : logger_("NtupleProcessor", "[SPC]       ")
@@ -23,8 +25,8 @@ SelectionProfile* SelectionProfileCollection::getSelectionProfile(std::string sp
   // If the SP doesn't exist, create it.
     if(!selectionProfiles_.count(spStr))
     {   logger_.debug("Key not found in list of SPs. Creating new SP({})", spStr);
-        selectionProfiles_[spStr] = new SelectionProfile(spStr);
-
+        selectionProfiles_[spStr] = new SelectionProfile(this, spStr);
+        //addObjectCriteriaToCollection(selectionProfiles_[spStr]);
       // If the specified lepton criteria isn't already stored, store it.
         // string newLepCrit = selectionProfiles_[spStr]->getObjectCriteriaString("L");
         // if(!lepCriteria_.count(newLepCrit))
@@ -35,4 +37,17 @@ SelectionProfile* SelectionProfileCollection::getSelectionProfile(std::string sp
 
   // Return pointer to SP in list.
     return selectionProfiles_[spStr];
+}
+
+void SelectionProfileCollection::addObjectCriteriaToCollection(SelectionProfile* sp)
+{ // Stores pointers to object criteria for each object in collection.
+    logger_.debug("addObjectCriteriaToCollection() called for {}", sp->specifier());
+  // Store/create an objectCriteria ptr for each object.
+    for( string& obj : SelectionProfile::objectLabelStrs_) sp->objCriteria_[obj] = getObjectCriteria(obj, sp->objectSpecifierStrs_[obj]);
+}
+
+ObjectCriteria* SelectionProfileCollection::getObjectCriteria(string& type, string& specifier)
+{ // Returns pointer to newly created or existing OC w/ given object type and specifier.
+    if(!objCriteria_[type].count(specifier)) objCriteria_[type][specifier] = new ObjectCriteria(specifier);
+    return objCriteria_[type][specifier];
 }
