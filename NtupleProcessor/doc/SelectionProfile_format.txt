@@ -4,8 +4,8 @@ jg Zllf0070c0110nc Lp20e21id3iso2sfc J0sip30e25jeccflva METptc0000tpf HF0iNoHFSV
 
 
 Default: Z = jgZllf0070c0110ncLp20e21id3iso2sfcJ0sip30e25jeccflvaMETptc0000tpfHF0iNoHFSVnsfn
-             [jg] [Zllf0070c0110nc] [Lp20e21idtisotsfc] [J0si0tip30e25jeccflva] [METptc0000tpf] [HF0iNoHFSVnsfn]
-             j[g] Z[ll][f0070][c0110][nc] L[p20][e21][id3][iso2][sfc] J[0si][p30][e25][jecc][flva] MET[c0000][tpf] HF[0i][NoHF][SVn][sfn]
+             [jg] [Zllf0070c0110rc] [Lp20e21idtisotsfc] [J0si0tip30e25jeccflva] [METptc0000tpf] [HF0iNoHFSVnsfn]
+             j[g] Z[ll][f0070][c0110][rc] L[p20][e21][id3][iso2][sfc] J[0si][p30][e25][jecc][flva] MET[c0000][tpf] HF[0i][NoHF][SVn][sfn]
 Minimum: "Z"
 Example of standard selection for templates: ZJ1METc40HF1CSVTsfc
 

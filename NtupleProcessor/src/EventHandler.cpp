@@ -38,10 +38,10 @@ void EventHandler::evaluateEvent()
     resetEventVariables();
 
   // Evaluate SelectionProfiles.
-    for( auto &kv : selectionProfiles_)
-    {   logger_.trace("Evaluating selection profile: {}", kv.first);
-        kv.second->evaluateEvent(this);
-    }
+    // for( auto &kv : selectionProfiles_)
+    // {   logger_.trace("Evaluating selection profile: {}", kv.first);
+    //     kv.second->evaluateEvent(this);
+    // }
 }
 
 void EventHandler::mapPhysicsObjects()
@@ -56,27 +56,13 @@ void EventHandler::resetEventVariables()
   // Reset event weight.
     wt_ = 1.0;
   // Reset vectors containing valid object pointers.
-    for( auto &kv : lepCriteria_) kv.second.clear();
+    //for( auto &kv : lepCriteria_) kv.second.clear();
 }
 
 SelectionProfile* EventHandler::getSelectionProfile(std::string spStr)
 { // Returns a pointer to an SP. If it doesn't exist, it creates it based on the given string.
     logger_.debug("getSelectionProfile() called for {}", spStr);
 
-  // If the SP doesn't exist, create it.
-    if(!selectionProfiles_.count(spStr))
-    {   logger_.debug("Key not found in list of SPs. Creating new SP({})", spStr);
-        selectionProfiles_[spStr] = new SelectionProfile(spStr);
-
-      // If the specified lepton criteria isn't already stored, store it.
-        string newLepCrit = selectionProfiles_[spStr]->getLeptonCriteria();
-        if(!lepCriteria_.count(newLepCrit))
-        {   logger_.debug("Adding Lepton Criteria to lepCriteria_: {}", newLepCrit);
-            lepCriteria_[newLepCrit] = vector<LeptonObject*>(0);
-        }
-    }
-
-  // Return pointer to SP in list.
-    return selectionProfiles_[spStr];
-
+  // Let the SelectionProfileCollection handle this mess.
+    return selectionCriteria_.getSelectionProfile(spStr);
 }
