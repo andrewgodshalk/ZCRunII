@@ -166,6 +166,14 @@ void NtupleProcessor::initializeHistogramExtractors()
 { // Sets up histogram extractors using input configuration files.
     logger_.trace("initializeHistogramExtractors() called.");
 
-    hExtractors_.push_back(new CutFlowTable(ntupleName_));
+  // HARDCODED cutFlowTable initializer
+    vector<string> spForCounting =
+    { "Zllf071c111Le24sfn",
+      "jg", "js", "jn",
+    };
+    hExtractors_.push_back(new CutFlowTable(ntupleName_, spForCounting));
+
+  // HARDCODED controlPlotExtractor initialization
     hExtractors_.push_back(new ControlPlotExtractor(ntupleName_));
+
 }

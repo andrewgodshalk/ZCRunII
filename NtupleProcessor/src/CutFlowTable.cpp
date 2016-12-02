@@ -1,31 +1,46 @@
 /*------------------------------------------------------------------------------
 CutFlowTable.cpp
  Created : 2016-11-02  godshalk
- Modified: 2016-11-02  godshalk
+ Modified: 2016-12-01  godshalk
 ------------------------------------------------------------------------------*/
 
 // Project Specific classes
 #include "CutFlowTable.h"
 
+using std::pair;
 using std::string;
+using std::vector;
 using std::to_string;
 
-CutFlowTable::CutFlowTable(string n)
-  : HistogramExtractor(n, "CFT", "Zllf071c111Le24sfn"),
+CutFlowTable::CutFlowTable(string n, vector<string>& spList)
+  : HistogramExtractor(n, "CFT", spList[0]),
     logger_("NtupleProcessor", "[CF]     ")
-{
-    logger_.debug("CutFlowTable created.");
+{   logger_.debug("CutFlowTable created.");
+  // Set up with a list of selection profiles to count.
+  // TO DO: Set it up to auto-generate SPs to count.
+    vector<string>::const_iterator sp = spList.begin();
+    for(vector<string>::const_iterator sp = spList.begin(); sp!=spList.end(); ++sp)
+    {   logger_.trace("Adding to the cut flow list: {}", *sp);
+        n_[*sp] = 0;
+    }
+}
+
+void CutFlowTable::setEventHandler(EventHandler* eh)
+{ // Overridden version of HE's setEventHandler. A special case to add extra SPs to master list.
+    logger_.trace("setEventHandler() called.");
+    HistogramExtractor::setEventHandler(eh);  // Call base class function.
+  // Set up SPs for each specified count.
+    for(auto& sp : n_) spPtr_[sp.first] = evt_->getSelectionProfile(sp.first);
 }
 
 void CutFlowTable::process()
 { // Called per event. Processes information and fills histograms.
-  // logger_.trace("process() called.");
+    logger_.trace("process() called.");
   // Find the event weight from EH and increment each counter.
     float wt = evt_->wt_;
-    if     (evt_->evtMap_.Vtype == 0) n_["VtypeZuu"]   += wt;
-    else if(evt_->evtMap_.Vtype == 1) n_["VtypeZee"]   += wt;
-    else if(evt_->evtMap_.Vtype == 5) n_["Vtype5"]     += wt;
-    else                              n_["VtypeOther"] += wt;
+  // Cycle through profiles to check.
+    // for( auto& sp : n_) if(evt_->evtSatisfies(sp.first)) sp.second += wt;
+    for( auto& sp : spPtr_) if(sp.second->evaluate()) n_[sp.first] += wt;
 }
 
 void CutFlowTable::terminate()

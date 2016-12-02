@@ -20,13 +20,14 @@
 #include <utility>
 #include <vector>
 // Project Specific classes
+#include "EventHandler.h"
 #include "ObjectCriteria.h"
 #include "SelectionProfileCollection.h"
 #include "Logger.h"
 
 // Forward declare interdependent class
 class SelectionProfileCollection;
-
+//class ObjectCriteria;
 
 class SelectionProfile
 {
@@ -37,8 +38,18 @@ class SelectionProfile
   // Accessors.
     const std::string full()     {return fullProfileStr_ ;}
     const std::string specifier(){return specifierStr_   ;}
-    const std::string getObjectCriteriaString (const std::string obj) { return objCriteria_[obj]->criteriaStr() ;}
-    const std::string getObjectSpecifierString(const std::string obj) { return objCriteria_[obj]->specifierStr();}
+    // const std::string getObjectCriteriaString (const std::string obj) { return objCriteria_[obj]->criteriaStr() ;}
+    // const std::string getObjectSpecifierString(const std::string obj) { return objectSpecifierStrs_[obj];}
+    const std::string getObjectCriteriaString (const std::string);
+    const std::string getObjectSpecifierString(const std::string);
+
+  // Evaluation functions.
+    bool evaluate(EventHandler* evt=NULL);
+    void reset();
+
+  // Variables for processing string.
+    static std::vector<std::string> objectLabelStrs_;
+    // static std::map<std::string, std::pair<std::size_t, std::size_t> > objectSubstrRange_;
 
   private:
     void breakDownSelectionByObject();
@@ -58,15 +69,15 @@ class SelectionProfile
     std::string fullProfileStr_;  // String created by class, filling in holes in specifier string with default values.
     std::map<std::string, std::string> objectSpecifierStrs_; // Strings for each object, taken from specifierStr_.
 
+  // Evaluation values.
+    bool evaluatated_;   // Whether this object has been evaluated.
+    bool meetsCriteria_; // Whether this object's criteria has been met.
+
   // Object Criteria Pointers
     std::map<std::string, ObjectCriteria*> objCriteria_;
 
   // Static default value for SelectionString
     const static std::string defaultProfileStr_;
-
-  // Variables for processing string.
-    static std::vector<std::string> objectLabelStrs_;
-    // static std::map<std::string, std::pair<std::size_t, std::size_t> > objectSubstrRange_;
 
     Logger logger_;
 

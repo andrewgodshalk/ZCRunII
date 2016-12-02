@@ -24,8 +24,6 @@ TreeIterator::TreeIterator(std::vector<HistogramExtractor*>& vHE)
 
   // Set up histogram extractors
     for( HistogramExtractor* h: hExtractors_ ) h->setEventHandler(evt_);
-    // TO DO: Decide where to set these up, how to configure.
-    // hExtractors_.push_back(new CutFlowTable(evt_));
 }
 
 void TreeIterator::Begin(TTree * /*tree*/){}

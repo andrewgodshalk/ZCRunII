@@ -31,14 +31,13 @@ class HistogramExtractor {
   public:
     HistogramExtractor(std::string n, std::string c, std::string s = "")
      : ntupleName_(n), className_(c), selectionProfileStr_(s)
-    {
-      // Set up RootFileManager
+    { // Set up RootFileManager
         std::string fileName = className_ + "_" + ntupleName_ + "_" + selectionProfileStr_ + ".root";
         rfManager_ = new RootFileManager(fileName);
     }
     virtual ~HistogramExtractor(){}
 
-    void setEventHandler(EventHandler* eh)
+    virtual void setEventHandler(EventHandler* eh)
     { // Set up HE's links to EH, including the link to its specified SP.
         evt_ = eh;
         selectionProfile_ = evt_->getSelectionProfile(selectionProfileStr_);

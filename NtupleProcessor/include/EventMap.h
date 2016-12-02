@@ -54,7 +54,8 @@ struct EventMap
     const static size_t maxNumLeps_ = 100;   // TEMPORARY WORKING VARIABLE - will be included in config file?
 
     // Map variables
-    Float_t json  ;
+    Float_t json         ;
+    Float_t json_silver  ;
     Float_t Vtype ;
     Float_t V_pt  ;
     Float_t V_eta ;

@@ -23,6 +23,7 @@
 #include "JetObject.h"
 #include "LeptonObject.h"
 #include "Logger.h"
+#include "SelectionProfile.h"
 #include "SelectionProfileCollection.h"
 
 class EventHandler
@@ -34,9 +35,9 @@ class EventHandler
     void mapTree(TTree*);
     void evaluateEvent();
 
-    EventMap evtMap_;
+    EventMap* evtMap_;
 
-    SelectionProfile* getSelectionProfile(std::string spStr);  // Returns SP pointer for given string.
+    SelectionProfile* getSelectionProfile(const std::string& spStr);  // Returns SP pointer for given string.
 
   // Calculated Event Values.
     float wt_;  // Combined weight of the event. Defaults to 1.0.
@@ -45,18 +46,26 @@ class EventHandler
     std::vector<   JetObject> jets_   ;
     std::vector<LeptonObject> leptons_;
 
-  private:
-    Logger logger_;
+  // Accessors
+    // bool evtSatisfies(const std::string& sp) {return selectionProfiles_->getSelectionProfile("SP")->evaluate(this);}
+    bool evtSatisfies(const std::string&);
+    // bool jetSatisfies(const std::string& jc) {return jetSatisfies_[jc];}
+    // bool lepSatisfies(const std::string& lc) {return lepSatisfies_[lc];}
 
-  // List of selection profiles to evaulate each event.
-    // std::map<std::string, SelectionProfile*> selectionProfiles_;
-    // std::map<std::string, std::vector<LeptonObject*> > lepCriteria_;
-    SelectionProfileCollection selectionCriteria_;
+  // Collections of objects satisfying given object criteria.
+    // TO DO: CREATE!
+
+  private:
+  // Collection of selection profiles to evaulate each event.
+    SelectionProfileCollection* selectionProfiles_;
+  // Collections of object and full event eval information. Rewritten each event.
+    // std::map<std::string, std::map<std::string, bool> > eval_;
 
   // Helper function to set up physics object lists
     void mapPhysicsObjects();
     void resetEventVariables();
 
+    Logger logger_;
 };
 
 

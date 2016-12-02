@@ -27,8 +27,8 @@ Default "" = "Lp20e21id3iso2sfc"
 L[p20][e21][idt][isot][sfc]
   [p20]  = pt minimum
   [e21]  = |eta| max *10
-  [id3]  = id level (n|l|m|t = none,loose,medium,tight)
-  [iso2] = iso level (n|l|t = none,loose,tight)
+  [idt]  = id level (n|l|m|t = none,loose,medium,tight)
+  [isot] = iso level (n|l|t = none,loose,tight)
   [sfc]  = lepton scale factors (n|c|u|d = none, central, up, down)
 Notes: Electron and Muon should have same set of preferences. Will need to double check, though.
      - Could always specify LM or LE separately...

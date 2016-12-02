@@ -19,6 +19,8 @@
 // Standard Libraries
 #include <map>
 #include <string>
+#include <utility>
+#include <vector>
 // ROOT Libraries
 #include <TH1.h>
 // Project Specific classes
@@ -31,14 +33,18 @@ class CutFlowTable : public HistogramExtractor
 {
   public:
     // CutFlowTable(EventHandler*);
-    CutFlowTable(std::string);
+    CutFlowTable(std::string, std::vector<std::string>&);
     ~CutFlowTable(){}
 
     void process();     // Called per event. Processes information and fills histograms.
     void terminate();   // Function that saves the histograms and performs any final actions before processing is completed.
+    void setEventHandler(EventHandler*);  // Overridden version of HE's setEventHandler. A special case to add extra SPs to master list.
 
   private:
     std::map<std::string, float> n_;   // Counts
+    std::map<std::string, SelectionProfile*> spPtr_;   // Pointers to selection profiles
+      // Currently not implemented, since event handler owns pointers and isn't set in HE until after construction.
+      // Could easily override HE.setEventHandler to include this, but currently no need to dig for individual SPs.
     Logger logger_;
 
     void printTable();  // Prints table to log.

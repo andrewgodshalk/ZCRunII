@@ -21,6 +21,14 @@ ControlPlotExtractor::ControlPlotExtractor(string n)
     // histograms_[htemp->GetName()] = htemp;
 }
 
+// void CutFlowTable::setEventHandler(EventHandler* eh)
+// { // Overridden version of HE's setEventHandler. Uses standard function.
+//     logger_.trace("setEventHandler() called.");
+//     standardSetEventHandler(eh);  // Call base class function.
+//   // Set up SPs for each specified count.
+//     for(auto& sp : n_) spPtr_[sp.first] = evt_->getSelectionProfile(sp.first);
+// }
+
 void ControlPlotExtractor::process()
 { // Called per event. Processes information and fills histograms.
    logger_.trace("process() called.");

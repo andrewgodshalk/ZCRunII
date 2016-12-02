@@ -30,19 +30,10 @@ const string SelectionProfile::defaultProfileStr_ = "jgZllf0070c0110rcLp20e21id3
 // Object specifiers strings
 std::vector<std::string> SelectionProfile::objectLabelStrs_ = {"j","Z","L","J","MET","HF"};
 
-// Object subtring ranges.
-// map<string, str_rng > SelectionProfile::objectSubstrRange_ =
-// { {   "j", str_rng( 0,  1) },
-//   {   "Z", str_rng( 2, 16) },
-//   {   "L", str_rng(17, 33) },
-//   {   "J", str_rng(34, 51) },
-//   { "MET", str_rng(52, 64) },
-//   {  "HF", str_rng(65, 78) },
-// };
-
 // CONSTRUCTOR
 SelectionProfile::SelectionProfile(SelectionProfileCollection* pc, string str)
   : parentCollection_(pc), specifierStr_(str), fullProfileStr_(""),
+    evaluatated_(false), meetsCriteria_(false),
     logger_("NtupleProcessor", "[SP]       ")
 {
     logger_.trace("SelectionProfile() specifier: {}", specifierStr_);
@@ -56,26 +47,10 @@ SelectionProfile::SelectionProfile(SelectionProfileCollection* pc, string str)
     logger_.trace("SelectionProfile() full str : {}", fullProfileStr_     );
     logger_.trace("SelectionProfile() default  : {}", defaultProfileStr_  );
 }
-/*
-const string SelectionProfile::getObjectCriteriaString(const string objStr)
-{ // Returns selection criteria for the given object.
-    logger_.trace("getObjectCriteriaString() called for {}", objStr);
 
-  // // If input object isn't listed, return empty string.
-  //   if (objectSubstrRange_.find(objStr) == objectSubstrRange_.end())
-  //   {
-  //     logger_.trace("getObjectCriteriaString(): {} not found, return blank string.", objStr);
-  //     return "";
-  //   }
-  //
-  // // Return substring for given object, determined by hard-coded substring ranges.
-  //   str_rng rng = objectSubstrRange_[objStr];
-  //   size_t length = rng.second-rng.first+1;
-  //   string returnStr = fullProfileStr_.substr(rng.first, length);
-  //   logger_.trace("getObjectCriteriaString(): returning {}", returnStr);
-  //   return returnStr;
-    return "";
-}*/
+const string SelectionProfile::getObjectCriteriaString (const std::string obj) { return objCriteria_[obj]->criteriaStr() ;}
+const string SelectionProfile::getObjectSpecifierString(const std::string obj) { return objectSpecifierStrs_[obj];}
+
 
 void SelectionProfile::breakDownSelectionByObject()
 { // Make a full selection string out of the smaller specifier string.
@@ -147,4 +122,20 @@ void SelectionProfile::partionSpecifierString(const std::vector<std::size_t>& lo
     //   logger_.trace("Spec for {} is {}", objectLabelStrs_[i], substrings[i]==""?"not specified":substrings[i]);
     for(auto &kv : objectSpecifierStrs_)
       logger_.trace("Spec for {} is {}", kv.first, kv.second==""?"not specified":kv.second);
+}
+
+// Evaluation functions.
+bool SelectionProfile::evaluate(EventHandler* evt)
+{   if(!evaluatated_)
+    {   for( auto& obj : objCriteria_) meetsCriteria_ = meetsCriteria_ && obj.second->evaluate(evt);
+        evaluatated_ = true;
+    }
+    logger_.trace("Returning {}.", (meetsCriteria_?"true":"false"));
+    return meetsCriteria_;
+}
+
+void SelectionProfile::reset()
+{   logger_.trace("reset(): called");
+    evaluatated_ = false; meetsCriteria_ = true;
+    for( auto& obj : objCriteria_) obj.second->reset();
 }

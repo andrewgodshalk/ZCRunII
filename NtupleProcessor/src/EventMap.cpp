@@ -28,15 +28,16 @@ void EventMap::mapTree(TTree* tree)
   // List all active branches.
     tree->SetBranchStatus("*",0);
     vector<string> eventBranches =
-    {   "json"     ,
-        "Vtype"    ,
-        "V_pt"     ,
-        "V_eta"    ,
-        "V_phi"    ,
-        "V_mass"   ,
-        "met_pt"   ,
-        "met_phi"  ,
-        "met_sumEt",
+    {   "json"       ,
+        "json_silver",
+        "Vtype"      ,
+        "V_pt"       ,
+        "V_eta"      ,
+        "V_phi"      ,
+        "V_mass"     ,
+        "met_pt"     ,
+        "met_phi"    ,
+        "met_sumEt"  ,
         "HLT_BIT_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v" ,
         "HLT_BIT_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v"          ,
         "HLT_BIT_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v",
@@ -68,6 +69,7 @@ void EventMap::mapTree(TTree* tree)
     logger_.trace("mapTree(): branch lists reactivated.");
 
     tree->SetBranchAddress( "json"                 , &json                  );
+    tree->SetBranchAddress( "json_silver"          , &json_silver           );
     tree->SetBranchAddress( "Vtype"                , &Vtype                 );
     tree->SetBranchAddress( "V_pt"                 , &V_pt                  );
     tree->SetBranchAddress( "V_eta"                , &V_eta                 );

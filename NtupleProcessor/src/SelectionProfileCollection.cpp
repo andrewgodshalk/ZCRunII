@@ -13,7 +13,8 @@ using std::string;
 
 // CONSTRUCTOR
 SelectionProfileCollection::SelectionProfileCollection()
-  : logger_("NtupleProcessor", "[SPC]       ")
+  : evaluatated_(false), meetsCriteria_(false),
+    logger_("NtupleProcessor", "[SPC]       ")
 {
     logger_.trace("SelectionProfileCollection() created.");
 }
@@ -26,18 +27,27 @@ SelectionProfile* SelectionProfileCollection::getSelectionProfile(std::string sp
     if(!selectionProfiles_.count(spStr))
     {   logger_.debug("Key not found in list of SPs. Creating new SP({})", spStr);
         selectionProfiles_[spStr] = new SelectionProfile(this, spStr);
-        //addObjectCriteriaToCollection(selectionProfiles_[spStr]);
-      // If the specified lepton criteria isn't already stored, store it.
-        // string newLepCrit = selectionProfiles_[spStr]->getObjectCriteriaString("L");
-        // if(!lepCriteria_.count(newLepCrit))
-        // {   logger_.debug("Adding Lepton Criteria to lepCriteria_: {}", newLepCrit);
-        //     lepCriteria_[newLepCrit] = vector<LeptonObject*>(0);
-        // }
     }
 
   // Return pointer to SP in list.
     return selectionProfiles_[spStr];
 }
+
+// Evaluating functions
+void SelectionProfileCollection::evaluate(EventHandler* evt)
+{ // Send evaluation command to all SPs.
+    logger_.trace("evaluate(): called");
+    for( auto& sp : selectionProfiles_ ) sp.second->evaluate(evt);
+}
+
+
+void SelectionProfileCollection::reset()
+{ // Send reset commands to all SPs.
+    logger_.trace("reset(): called");
+    evaluatated_ = meetsCriteria_ = false;
+    for( auto& sp : selectionProfiles_ ) sp.second->reset();
+}
+
 
 void SelectionProfileCollection::addObjectCriteriaToCollection(SelectionProfile* sp)
 { // Stores pointers to object criteria for each object in collection.
@@ -48,6 +58,7 @@ void SelectionProfileCollection::addObjectCriteriaToCollection(SelectionProfile*
 
 ObjectCriteria* SelectionProfileCollection::getObjectCriteria(string& type, string& specifier)
 { // Returns pointer to newly created or existing OC w/ given object type and specifier.
-    if(!objCriteria_[type].count(specifier)) objCriteria_[type][specifier] = new ObjectCriteria(specifier);
+    // if(!objCriteria_[type].count(specifier)) objCriteria_[type][specifier] = new ObjectCriteria(specifier);
+    if(!objCriteria_[type].count(specifier)) objCriteria_[type][specifier] = ObjectCriteria::createNew(type,specifier);
     return objCriteria_[type][specifier];
 }

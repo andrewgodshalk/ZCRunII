@@ -13,23 +13,32 @@
 
 // Standard Libraries
 #include <string>
+#include <vector>
 // Project Specific classes
 //#include "SelectionProfile.h"
+#include "EventHandler.h"
 #include "Logger.h"
+
+// Forward declare interdependent class
+class EventHandler;
 
 class ObjectCriteria
 {
   public:
-    ObjectCriteria(std::string op="");
+    ObjectCriteria(std::string, std::string);  // Constructor takes the object's type and profile.
     ~ObjectCriteria(){}
 
-    // Virtual functions
-    // virtual ObjectCriteria* createNew(std::string op);  // Factory function. Creates a new object of this type.
-    // virtual void setCriteria();  // Sets the criteria of the object based on its specifier string.
+  // Evaluation functions.
+    virtual bool evaluate(EventHandler*) = 0;
+    void reset();
+
+  // Factory Function
+    static ObjectCriteria* createNew(std::string&, std::string&);  // Returns pointer to object made of with given type and specifier.
 
   // Enums defining options for various selection features.
     enum class application_status : char {none = 'n', central = 'c', err_up = 'u', err_down = 'd'};
     enum class application_level  : char {none = 'n', loose = 'l', medium = 'm', tight = 't'};
+    enum class jet_selection_exclusivity : char {inclusive = 'i', exclusive = 'e'};
 
   // Accessors
     const std::string& criteriaStr() {return fullSpecStr_;}
@@ -37,11 +46,28 @@ class ObjectCriteria
 
     static std::map<std::string, std::string> defaultObjectProfiles_;
 
-
   protected:
-    std::string specStr_;
-    std::string fullSpecStr_;
+    std::string objTypeStr_ ;   // Specifies what type of object OC describes.
+    std::string specStr_    ;   // String used to define the object
+    std::string fullSpecStr_;   // Full string describing the object's criteria
+
+  // Evaluation values.
+    bool evaluatated_;   // Whether this object has been evaluated.
+    bool meetsCriteria_; // Whether this object's criteria has been met.
+
+    // std::string::const_iterator specIter_;  // For iterating through specified profile
+    // std::string::const_iterator dfltIter_;  // For iterating through default profile
+
     Logger logger_;
+
+    void partitionPattern(const std::string&, std::vector<std::string>&);
+      // Breaks a match pattern into its pieces to be processed individually. Clears vector and stores results for output.
+
+    template <typename T>
+    void getCriteriaFromSelectionProfile( const std::string&, T&);
+      // Function that takes the next locations in the default and input specifier strings,
+      //   looks to see if the given pattern is found in the specifier, sets the referenced variable to the Information
+      //   from the pattern, and updates the fullSpecStr_ with the relavent information.
 };
 
 class JSONCriteria : protected ObjectCriteria
@@ -49,16 +75,19 @@ class JSONCriteria : protected ObjectCriteria
   public:
     JSONCriteria(std::string op="");
     ~JSONCriteria(){}
+    bool evaluate(EventHandler* evt=NULL);
 
   // Criteria Variables.
     char jsonType_;
 };
+
 
 class DileptonCriteria : protected ObjectCriteria
 {
   public:
     DileptonCriteria(std::string op="");
     ~DileptonCriteria(){}
+    bool evaluate(EventHandler* evt=NULL);
 
   // Criteria Variables.
     std::string dilepConstituents_;
@@ -72,6 +101,7 @@ class LeptonCriteria : protected ObjectCriteria
   public:
     LeptonCriteria(std::string op="");
     ~LeptonCriteria(){}
+    bool evaluate(EventHandler* evt=NULL);
 
   // Criteria Variables.
     float lepPtMin_, lepEtaMax_;
@@ -84,6 +114,7 @@ class JetCriteria : protected ObjectCriteria
   public:
     JetCriteria(std::string op="");
     ~JetCriteria(){}
+    bool evaluate(EventHandler* evt=NULL);
 
   // Criteria Variables.
     int jetMinimum_;
@@ -97,6 +128,7 @@ class METCriteria : protected ObjectCriteria
   public:
     METCriteria(std::string op="");
     ~METCriteria(){}
+    bool evaluate(EventHandler* evt=NULL);
 
   // Criteria Variables.
     float metPtFloor_  ;
@@ -109,11 +141,11 @@ class HFCriteria : protected ObjectCriteria
   public:
     HFCriteria(std::string op="");
     ~HFCriteria(){}
+    bool evaluate(EventHandler* evt=NULL);
 
   // Criteria Variables.
     std::string hfTag;
     application_status hfTagApplication;
 };
-
 
 #endif
