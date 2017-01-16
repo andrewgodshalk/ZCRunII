@@ -167,7 +167,8 @@ void NtupleProcessor::initializeHistogramExtractors()
 
   // HARDCODED cutFlowTable initializer
     vector<string> spForCounting =
-    { "Zllf071c111Le24sfn",
+    { "jnTn",         // NULL CHOICE
+      "Zllf071c111Le24sfn",
       "Zllf071c111Le24sfnMETJ1HFCSVT",
       "jg", "js", "jn",
       "Te", "Tu", "Tl", "Tee", "Tuu", "Teu", "Tll",

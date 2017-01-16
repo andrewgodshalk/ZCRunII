@@ -79,6 +79,7 @@ class JSONCriteria : protected ObjectCriteria
 
   // Criteria Variables.
     char jsonType_;
+    bool (*jsonCheck_)(EventMap*);  // Function that is defined by constructor, based on input specifier, to be checked for every event.
 };
 
 class TriggerCriteria : protected ObjectCriteria
@@ -90,6 +91,10 @@ class TriggerCriteria : protected ObjectCriteria
 
   // Criteria Variables.
     std::string trigger_;
+
+  // Evaulation subfunctions. - List of function pointers for each JSON case.
+    // static std::map<char, bool (*)(EventMap*)> jsonCheckFunctions;
+    // bool (*jsonCheck_)(EventMap*);  // Function that is selected by constructor to be checked based on input.
 };
 
 class DileptonCriteria : protected ObjectCriteria

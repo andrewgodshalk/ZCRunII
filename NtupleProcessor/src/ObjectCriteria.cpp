@@ -67,19 +67,23 @@ JSONCriteria::JSONCriteria(string op) : ObjectCriteria( "j", op)
     fullSpecStr_ = specStr_.empty() ? defaultObjectProfiles_["j"] : specStr_;
   // Set JSON type to whatever was specfied in the second character.
     jsonType_ = fullSpecStr_[1];
+  // Set up function pointer based on input json type.
+    switch(jsonType_)
+    {
+        case 'g': jsonCheck_ = [](EventMap* em) -> bool {return em->json       ;}; break;
+        case 's': jsonCheck_ = [](EventMap* em) -> bool {return em->json_silver;}; break;
+        case 'n': jsonCheck_ = [](EventMap* em) -> bool {return true           ;}; break;
+        default : logger_.warn("Invalid JSON type specified: {}", jsonType_);
+                  jsonCheck_ = [](EventMap* em){return true           ;}; break;
+    }
+    //jsonCheck = [](EventMap*){return true;};
 }
 
 bool JSONCriteria::evaluate(EventHandler* evt)
-{   if(evaluatated_) return meetsCriteria_;
-    switch(jsonType_)
-    {
-        case 'g': meetsCriteria_ = evt->evtMap_->json;        break;
-        case 's': meetsCriteria_ = evt->evtMap_->json_silver; break;
-        case 'n': meetsCriteria_ = true;                      break;
-        default : logger_.warn("Invalid JSON type specified: {}", jsonType_);
-                  meetsCriteria_=false;
+{   if(!evaluatated_)
+    {   meetsCriteria_ = jsonCheck_(evt->evtMap_);
+        evaluatated_ = true;
     }
-    evaluatated_ = true;
     return meetsCriteria_;
 }
 
@@ -99,6 +103,7 @@ TriggerCriteria::TriggerCriteria(string op) : ObjectCriteria("T", op)
 
 bool TriggerCriteria::evaluate(EventHandler* evt)
 { if(evaluatated_) return meetsCriteria_;
+  else if(trigger_ == "n")  meetsCriteria_ = true;
   else if(trigger_ == "e")  meetsCriteria_ = false;
   else if(trigger_ == "u")  meetsCriteria_ = false;
   else if(trigger_ == "l")  meetsCriteria_ = false;
