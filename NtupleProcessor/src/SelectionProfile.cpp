@@ -23,13 +23,25 @@ using std::string;
 using std::vector;
 typedef pair<size_t, size_t> str_rng;
 
+//------------------------------------------------------------------------------
+// FREE FUNCTIONS
 
-// Define default selection profile and object criteria (see doc/SelectionProfile_format.txt)
+// startsWith() - Checks if the big string starts with the little string.
+bool startsWith(const string& bigStr, const string& lilStr)
+{
+    bigStr.compare(0, lilStr.length(), lilStr);
+}
+
+
+//------------------------------------------------------------------------------
+// STATIC MEMBERS
 const string SelectionProfile::defaultProfileStr_ = "jgTllZllf0070c0110rcLp20e21id3iso2sfcMETptc0000tpfJ0sip30e25jeccflvaHF0iNoHFSVnsfn";
 
 // Object specifiers strings
 std::vector<std::string> SelectionProfile::objectLabelStrs_ = {"j","T","Z","L","MET","J","HF"};
 
+
+//------------------------------------------------------------------------------
 // CONSTRUCTOR
 SelectionProfile::SelectionProfile(SelectionProfileCollection* pc, string str)
   : parentCollection_(pc), specifierStr_(str), fullProfileStr_(""),
@@ -48,6 +60,8 @@ SelectionProfile::SelectionProfile(SelectionProfileCollection* pc, string str)
     logger_.trace("SelectionProfile() default  : {}", defaultProfileStr_  );
 }
 
+//------------------------------------------------------------------------------
+// MEMBER FUNCTIONS
 const string SelectionProfile::getObjectCriteriaString (const std::string obj) { return objCriteria_[obj]->criteriaStr() ;}
 const string SelectionProfile::getObjectSpecifierString(const std::string obj) { return objectSpecifierStrs_[obj];}
 
@@ -79,14 +93,31 @@ void SelectionProfile::getObjectSplitLocations(vector<size_t>& locations)
 { // Find starting locations of each object in specifier string.
     logger_.trace("getObjectSplitLocations() called");
 
-  // Find each object in the string remaining after the previously found object.
-    size_t searchStartingPoint = 0;  // Set equal to index after last found object string.
-    for(size_t i=0; i<objectLabelStrs_.size(); i++)
-    { // Find start location of next object
-        locations[i] = specifierStr_.find(objectLabelStrs_[i], searchStartingPoint);
-      // If a valid position was found, set the new search starting point to just after the found object string.
-        if(locations[i]!=string::npos) searchStartingPoint = locations[i]+objectLabelStrs_[i].length();
+  // Searching through string, find next specified object.
+    size_t objectToLookForFirst = 0;  // Index of the next object to find from the list of objects.
+    // while there is still string left to search
+    for(size_t iChar = 0; iChar<specifierStr_.size(); iChar++)
+    { // for the remaining objects...
+        for( size_t iObj = objectToLookForFirst; iObj < objectLabelStrs_.size(); iObj++)
+        { // See if the object string is located at index iChar in the SP specifier string.
+            if(specifierStr_.compare(iChar, objectLabelStrs_[iObj].length(), objectLabelStrs_[iObj]) == 0)
+            { // If so...
+                locations[iObj] = iChar;         // ... save the location of this object to the input vector, ...
+                objectToLookForFirst = iObj+1;   // ... set up to search for the next object after the last found, ...
+                iChar += objectLabelStrs_[iObj].length()-1;  // ... Move to end of current object string, ...
+                continue;                        // ... and move on to the next character in the spec string.
+            }
+        }
     }
+  // FOLLOWING CODE REPLACED. Led to errors when object specifier letter was used in another object's specifier.
+  // // Find each object in the string remaining after the previously found object.
+  //   size_t searchStartingPoint = 0;  // Set equal to index after last found object string.
+  //   for(size_t i=0; i<objectLabelStrs_.size(); i++)
+  //   { // Find start location of next object
+  //       locations[i] = specifierStr_.find(objectLabelStrs_[i], searchStartingPoint);
+  //     // If a valid position was found, set the new search starting point to just after the found object string.
+  //       if(locations[i]!=string::npos) searchStartingPoint = locations[i]+objectLabelStrs_[i].length();
+  //   }
 
   // **DEBUG** Print string information.
     logger_.trace("{}", specifierStr_);
