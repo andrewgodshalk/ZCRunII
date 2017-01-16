@@ -25,10 +25,10 @@ typedef pair<size_t, size_t> str_rng;
 
 
 // Define default selection profile and object criteria (see doc/SelectionProfile_format.txt)
-const string SelectionProfile::defaultProfileStr_ = "jgZllf0070c0110rcLp20e21id3iso2sfcJ0sip30e25jeccflvaMETptc0000tpfHF0iNoHFSVnsfn";
+const string SelectionProfile::defaultProfileStr_ = "jgTllZllf0070c0110rcLp20e21id3iso2sfcMETptc0000tpfJ0sip30e25jeccflvaHF0iNoHFSVnsfn";
 
 // Object specifiers strings
-std::vector<std::string> SelectionProfile::objectLabelStrs_ = {"j","Z","L","J","MET","HF"};
+std::vector<std::string> SelectionProfile::objectLabelStrs_ = {"j","T","Z","L","MET","J","HF"};
 
 // CONSTRUCTOR
 SelectionProfile::SelectionProfile(SelectionProfileCollection* pc, string str)
@@ -54,12 +54,11 @@ const string SelectionProfile::getObjectSpecifierString(const std::string obj) {
 
 void SelectionProfile::breakDownSelectionByObject()
 { // Make a full selection string out of the smaller specifier string.
-  // String breakdown: j[g] Z[ll][f0070][c0110][nc] L[p20][e21][id3][iso2][sfc] J[0si][p30][e25][jecc][flva] MET[c0000][tpf] HF[0i][NoHF][SVn][sfn]
     //typedef string::const_iterator str_iter;
     logger_.trace("breakDownSelectionByObject() called");
 
   // Find object strings within specifier string.
-    vector<size_t> objLocs    (objectLabelStrs_.size(), string::npos);
+    vector<size_t> objLocs(objectLabelStrs_.size(), string::npos);
     // vector<string> objSpecStrs(objectLabelStrs_.size(), "");
     getObjectSplitLocations(objLocs);
     // partionSpecifierString (objLocs, objSpecStrs);
@@ -91,8 +90,8 @@ void SelectionProfile::getObjectSplitLocations(vector<size_t>& locations)
 
   // **DEBUG** Print string information.
     logger_.trace("{}", specifierStr_);
-    logger_.trace("0123456789012345678901234567890123456789012345678901234567890123456789012345678");
-    logger_.trace("0         1         2         3         4         5         6         7        ");
+    logger_.trace("01234567890123456789012345678901234567890123456789012345678901234567890123456789012345");
+    logger_.trace("0         1         2         3         4         5         6         7         8     ");
 
   // Print locations found.
     for(size_t i=0; i<locations.size(); i++)

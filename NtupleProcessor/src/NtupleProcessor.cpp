@@ -81,7 +81,6 @@ NtupleProcessor::NtupleProcessor(int argc, char* argv[])
 
   // Clean up
     delete ntuples_;
-
 }
 
 bool NtupleProcessor::processCommandLineInput(int argc, char* argv[])
@@ -169,7 +168,9 @@ void NtupleProcessor::initializeHistogramExtractors()
   // HARDCODED cutFlowTable initializer
     vector<string> spForCounting =
     { "Zllf071c111Le24sfn",
+      "Zllf071c111Le24sfnMETJ1HFCSVT",
       "jg", "js", "jn",
+      "Te", "Tu", "Tl", "Tee", "Tuu", "Teu", "Tll",
     };
     hExtractors_.push_back(new CutFlowTable(ntupleName_, spForCounting));
 

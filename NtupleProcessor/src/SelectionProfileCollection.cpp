@@ -50,7 +50,7 @@ void SelectionProfileCollection::reset()
 
 
 void SelectionProfileCollection::addObjectCriteriaToCollection(SelectionProfile* sp)
-{ // Stores pointers to object criteria for each object in collection.
+{ // Stores pointers to object criteria from an input selection profile.
     logger_.debug("addObjectCriteriaToCollection() called for {}", sp->specifier());
   // Store/create an objectCriteria ptr for each object.
     for( string& obj : SelectionProfile::objectLabelStrs_) sp->objCriteria_[obj] = getObjectCriteria(obj, sp->objectSpecifierStrs_[obj]);

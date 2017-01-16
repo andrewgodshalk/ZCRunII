@@ -1,18 +1,24 @@
-jg Zllf0070c0110nc Lp20e21id3iso2sfc J0sip30e25jeccflva METptc0000tpf HF0iNoHFSVnsfn
-01 234567890123456 78901234567890123 456789012345678901 2345678901234 56789012345678
-0          1          2         3          4         5          6          7
+jg Tll Zllf0070c0110nc Lp20e21id3iso2sfc METptc0000tpf J0sip30e25jeccflva  HF0iNoHFSVnsfn
+01 234 567890123456789 01234567890123456 7890123456789 012345678901234567 89012345678901
+0           1          2         3          4          5         6          7         8
 
-
-Default: Z = jgZllf0070c0110ncLp20e21id3iso2sfcJ0sip30e25jeccflvaMETptc0000tpfHF0iNoHFSVnsfn
-             [jg] [Zllf0070c0110rc] [Lp20e21idtisotsfc] [J0si0tip30e25jeccflva] [METptc0000tpf] [HF0iNoHFSVnsfn]
-             j[g] Z[ll][f0070][c0110][rc] L[p20][e21][id3][iso2][sfc] J[0si][p30][e25][jecc][flva] MET[c0000][tpf] HF[0i][NoHF][SVn][sfn]
+Default: Z = jgTllZllf0070c0110ncLp20e21id3iso2sfcMETptc0000tpfJ0sip30e25jeccflvaHF0iNoHFSVnsfn
+             [jg] [Tll] [Zllf0070c0110rc] [Lp20e21idtisotsfc] [METptc0000tpf] [J0si0tip30e25jeccflva] [HF0iNoHFSVnsfn]
+             j[g] T[ll] Z[ll][f0070][c0110][rc] L[p20][e21][id3][iso2][sfc] MET[c0000][tpf] J[0si][p30][e25][jecc][flva] HF[0i][NoHF][SVn][sfn]
 Minimum: "Z"
-Example of standard selection for templates: ZJ1METc40HF1CSVTsfc
+Example of standard selection for templates: ZMETc40J1HF1CSVTsfc
 
-JSON
+[JSON]
 Default: "" = "jg"
 j[g]
  [g] = g|s|n = gold, silver, or no JSON.
+
+[Trigger]
+Default: "" = "Tll"
+T[ll]
+ [ll] = lepton trigger (n, e, u, l, ee, uu, eu, ll)
+Notes: SF applied based on trigger selection
+- If using single trigger, need to worry about matching lepton...
 
 [Dilepton]
 Default: "Z" = "Zllf0070c0110rc"
@@ -33,6 +39,14 @@ L[p20][e21][idt][isot][sfc]
 Notes: Electron and Muon should have same set of preferences. Will need to double check, though.
      - Could always specify LM or LE separately...
 
+[MET]
+Default: "" = "METc0000tpf"
+MET[c0000][tpf]
+  [MET] - If not listed, no MET selection is done.
+  [c40] = max(ceiling) pt
+  [f40] = min(floor) pt (not implemented)
+  [tpf] = type of MET
+
 [JETS]
 Default: "" = "J0si0tip30e25jeccflva"
 J[0si][0ti][p30][e25][jecc][flva]
@@ -42,14 +56,6 @@ J[0si][0ti][p30][e25][jecc][flva]
   [e25] = max |eta|
   [jecc] = jet energy correction (n|c|u|d = none, central, up, down)
   [flva] = event flavor to select. a|b|c|l = Z+any|b|c|light event.
-
-[MET]
-Default: "" = "METc0000tpf"
-MET[c0000][tpf]
-  [MET] - If not listed, no MET selection is done.
-  [c40] = max(ceiling) pt
-  [f40] = min(floor) pt (not implemented)
-  [tpf] = type of MET
 
 [HF & SVT]
 Default: "" = HF0iNoHFSVnsfn

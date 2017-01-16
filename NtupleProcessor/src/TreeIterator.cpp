@@ -4,7 +4,6 @@ TreeIterator.cpp
  Created : 2015-05-14  godshalk
  Modified: 2016-10-24  godshalk
 
-
  2016-10-24 - Moved constructor into source.
  2016-10-16 - Transferred, slightly modified to work with new version of NtupleProcessor
 
@@ -14,6 +13,8 @@ TreeIterator.cpp
 #include "TreeIterator.h"
 
 using std::string;
+using std::cout;
+using std::endl;
 
 TreeIterator::TreeIterator(std::vector<HistogramExtractor*>& vHE)
   : fChain(0), hExtractors_(vHE), nEntries_(0), finalEntry_(0), nEntriesProcessed_(0),
@@ -69,7 +70,8 @@ Bool_t TreeIterator::Process(Long64_t entry)
 
   // Set up status outputs
     //logger_.trace("#{}:", nEntriesProcessed_);
-    if(nEntriesProcessed_%100000 == 0 || nEntriesProcessed_==finalEntry_) logger_.info("#{}", nEntriesProcessed_);
+    //if(nEntriesProcessed_%100000 == 0 || nEntriesProcessed_==finalEntry_) logger_.info("#{}", nEntriesProcessed_);
+    if(nEntriesProcessed_%100000 == 0 || nEntriesProcessed_==finalEntry_) cout << "  " << nEntriesProcessed_ << endl;
 
   // Evaluate selection profiles.
     evt_->evaluateEvent();

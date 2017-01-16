@@ -21,15 +21,14 @@ typedef string::const_iterator str_iter;
 // Static Variables
 map<string, string> ObjectCriteria::defaultObjectProfiles_ =
 { {   "j", "jg"                 },
+  {   "T", "ll"                 },
   {   "Z", "Zllf0070c0110nc"    },
   {   "L", "Lp20e21idtisotsfc"  },
   {   "J", "J0sip30e25jeccflva" },
   { "MET", "METc0000tpf"        },
   {  "HF", "HF0iNoHFSVnsfn"     },
 };
-// String breakdown: j[g] Z[ll][f0070][c0110][rc] L[p20][e21][idt][iso2][sfc]  J[0si][0ti][p30][e25][jecc][flva] MET[f0000][c9999][tpf] HF[0i][NoHF][SVn][sfn]
-
-//Logger ObjectCriteria::logger_("NtupleProcessor", "[OC]       ");
+// String breakdown: j[g] T[ll] Z[ll][f0070][c0110][rc] L[p20][e21][idt][iso2][sfc]  J[0si][0ti][p30][e25][jecc][flva] MET[f0000][c9999][tpf] HF[0i][NoHF][SVn][sfn]
 
 // CONSTRUCTORS: Creates an object mapped to the variables at the 'i'th index of the given event's arrays.
 ObjectCriteria::ObjectCriteria(string ot, string op)
@@ -47,6 +46,7 @@ JSONCriteria::JSONCriteria(string op) : ObjectCriteria( "j", op)
     jsonType_ = fullSpecStr_[1];
 }
 
+TriggerCriteria::TriggerCriteria(string op) : ObjectCriteria(  "T", op){}
 DileptonCriteria::DileptonCriteria(string op) : ObjectCriteria(  "Z", op){}
 LeptonCriteria::LeptonCriteria(string op) : ObjectCriteria(  "L", op){}
 JetCriteria::JetCriteria(string op) : ObjectCriteria(  "J", op){}
@@ -57,6 +57,7 @@ HFCriteria::HFCriteria(string op) : ObjectCriteria( "HF", op){}
 ObjectCriteria* ObjectCriteria::createNew(std::string& type, std::string& specifier)
 { // Returns pointer to object made of with given type and specifier.
     if(type ==   "j") return (ObjectCriteria*) new     JSONCriteria(specifier);
+    if(type ==   "T") return (ObjectCriteria*) new  TriggerCriteria(specifier);
     if(type ==   "Z") return (ObjectCriteria*) new DileptonCriteria(specifier);
     if(type ==   "L") return (ObjectCriteria*) new   LeptonCriteria(specifier);
     if(type ==   "J") return (ObjectCriteria*) new      JetCriteria(specifier);
@@ -86,6 +87,11 @@ bool JSONCriteria::evaluate(EventHandler* evt)
 }
 
 bool DileptonCriteria::evaluate(EventHandler* evt)
+{ if(!evaluatated_) evaluatated_ = meetsCriteria_ = true;
+  return meetsCriteria_;
+}
+
+bool TriggerCriteria::evaluate(EventHandler* evt)
 { if(!evaluatated_) evaluatated_ = meetsCriteria_ = true;
   return meetsCriteria_;
 }

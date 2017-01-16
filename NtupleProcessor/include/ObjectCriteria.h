@@ -81,6 +81,16 @@ class JSONCriteria : protected ObjectCriteria
     char jsonType_;
 };
 
+class TriggerCriteria : protected ObjectCriteria
+{
+  public:
+    TriggerCriteria(std::string op="");
+    ~TriggerCriteria(){}
+    bool evaluate(EventHandler* evt=NULL);
+
+  // Criteria Variables.
+    std::string trigger_;
+};
 
 class DileptonCriteria : protected ObjectCriteria
 {
