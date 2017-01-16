@@ -21,7 +21,7 @@ typedef string::const_iterator str_iter;
 // Static Variables
 map<string, string> ObjectCriteria::defaultObjectProfiles_ =
 { {   "j", "jg"                 },
-  {   "T", "ll"                 },
+  {   "T", "Tll"                },
   {   "Z", "Zllf0070c0110nc"    },
   {   "L", "Lp20e21idtisotsfc"  },
   {   "J", "J0sip30e25jeccflva" },
@@ -30,30 +30,15 @@ map<string, string> ObjectCriteria::defaultObjectProfiles_ =
 };
 // String breakdown: j[g] T[ll] Z[ll][f0070][c0110][rc] L[p20][e21][idt][iso2][sfc]  J[0si][0ti][p30][e25][jecc][flva] MET[f0000][c9999][tpf] HF[0i][NoHF][SVn][sfn]
 
-// CONSTRUCTORS: Creates an object mapped to the variables at the 'i'th index of the given event's arrays.
+//------------------------------------------------------------------------------
+// VIRTUAL CLASS
 ObjectCriteria::ObjectCriteria(string ot, string op)
   : objTypeStr_(ot), specStr_(op), fullSpecStr_(ot),
     evaluatated_(false), meetsCriteria_(false),
     logger_("NtupleProcessor", "[OC]         ")
 {   logger_.trace("ObjectCriteria() created w/ type, profile: {}, {}", ot, op); }
 
-JSONCriteria::JSONCriteria(string op) : ObjectCriteria( "j", op)
-{   logger_.trace("JSONCriteria() created w/ profile: {}", op);
-  // Get JSON setting from strings. String breakdown: j[g]
-  // Only one input, so just set to default if empty.
-    fullSpecStr_ = specStr_.empty() ? defaultObjectProfiles_["j"] : specStr_;
-  // Set JSON type to whatever was specfied in the second character.
-    jsonType_ = fullSpecStr_[1];
-}
-
-TriggerCriteria::TriggerCriteria(string op) : ObjectCriteria(  "T", op){}
-DileptonCriteria::DileptonCriteria(string op) : ObjectCriteria(  "Z", op){}
-LeptonCriteria::LeptonCriteria(string op) : ObjectCriteria(  "L", op){}
-JetCriteria::JetCriteria(string op) : ObjectCriteria(  "J", op){}
-METCriteria::METCriteria(string op) : ObjectCriteria("MET", op){}
-HFCriteria::HFCriteria(string op) : ObjectCriteria( "HF", op){}
-
-// Factory Function
+// FACTORY FUNCTION
 ObjectCriteria* ObjectCriteria::createNew(std::string& type, std::string& specifier)
 { // Returns pointer to object made of with given type and specifier.
     if(type ==   "j") return (ObjectCriteria*) new     JSONCriteria(specifier);
@@ -71,7 +56,19 @@ void ObjectCriteria::reset()
     evaluatated_ = meetsCriteria_ = false;
 }
 
-// Evaluation Functions
+
+//------------------------------------------------------------------------------
+// JSON CRITERIA
+
+JSONCriteria::JSONCriteria(string op) : ObjectCriteria( "j", op)
+{   logger_.trace("JSONCriteria() created w/ profile: {}", op);
+  // Get JSON setting from strings. String breakdown: j[g]
+  // Only one input, so just set to default if empty.
+    fullSpecStr_ = specStr_.empty() ? defaultObjectProfiles_["j"] : specStr_;
+  // Set JSON type to whatever was specfied in the second character.
+    jsonType_ = fullSpecStr_[1];
+}
+
 bool JSONCriteria::evaluate(EventHandler* evt)
 {   if(evaluatated_) return meetsCriteria_;
     switch(jsonType_)
@@ -86,35 +83,90 @@ bool JSONCriteria::evaluate(EventHandler* evt)
     return meetsCriteria_;
 }
 
+
+//------------------------------------------------------------------------------
+// TRIGGER CRITERIA
+
+TriggerCriteria::TriggerCriteria(string op) : ObjectCriteria("T", op)
+{   logger_.trace("TriggerCriteria() created w/ profile: {}", op);
+  // Get Trigger setting from strings. String breakdown: T[ll]
+  // Only one input, so just set to default if empty.
+    fullSpecStr_ = specStr_.empty() ? defaultObjectProfiles_["T"] : specStr_;
+  // Set type to whatever follows the first character
+    trigger_ = fullSpecStr_.substr(1);
+    logger_.trace("TriggerCriteria() trigger set to : {}", trigger_);
+}
+
+bool TriggerCriteria::evaluate(EventHandler* evt)
+{ if(evaluatated_) return meetsCriteria_;
+  else if(trigger_ == "e")  meetsCriteria_ = false;
+  else if(trigger_ == "u")  meetsCriteria_ = false;
+  else if(trigger_ == "l")  meetsCriteria_ = false;
+  else if(trigger_ == "ee") meetsCriteria_ = evt->evtMap_->HLT_BIT_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v;
+  else if(trigger_ == "eu") meetsCriteria_ = false;
+  else if(trigger_ == "uu") meetsCriteria_ = evt->evtMap_->HLT_BIT_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v + evt->evtMap_->HLT_BIT_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v;
+  else if(trigger_ == "ll") meetsCriteria_ =   evt->evtMap_->HLT_BIT_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v
+                                            + evt->evtMap_->HLT_BIT_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v
+                                            + evt->evtMap_->HLT_BIT_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v;
+  evaluatated_ = true;
+  return meetsCriteria_;
+}
+
+//------------------------------------------------------------------------------
+// DILEPTON CRITERIA
+
+DileptonCriteria::DileptonCriteria(string op) : ObjectCriteria("Z", op){}
+
 bool DileptonCriteria::evaluate(EventHandler* evt)
 { if(!evaluatated_) evaluatated_ = meetsCriteria_ = true;
   return meetsCriteria_;
 }
 
-bool TriggerCriteria::evaluate(EventHandler* evt)
-{ if(!evaluatated_) evaluatated_ = meetsCriteria_ = true;
-  return meetsCriteria_;
-}
+
+//------------------------------------------------------------------------------
+// LEPTON CRITERIA
+
+LeptonCriteria::LeptonCriteria(string op) : ObjectCriteria("L", op){}
 
 bool LeptonCriteria::evaluate(EventHandler* evt)
 { if(!evaluatated_) evaluatated_ = meetsCriteria_ = true;
   return meetsCriteria_;
 }
 
-bool JetCriteria::evaluate(EventHandler* evt)
-{ if(!evaluatated_) evaluatated_ = meetsCriteria_ = true;
-  return meetsCriteria_;
-}
+
+//------------------------------------------------------------------------------
+// MET CRITERIA
+
+METCriteria::METCriteria(string op) : ObjectCriteria("MET", op){}
 
 bool METCriteria::evaluate(EventHandler* evt)
 { if(!evaluatated_) evaluatated_ = meetsCriteria_ = true;
   return meetsCriteria_;
 }
 
+
+//------------------------------------------------------------------------------
+// JET CRITERIA
+
+JetCriteria::JetCriteria(string op) : ObjectCriteria("J", op){}
+
+bool JetCriteria::evaluate(EventHandler* evt)
+{ if(!evaluatated_) evaluatated_ = meetsCriteria_ = true;
+  return meetsCriteria_;
+}
+
+
+//------------------------------------------------------------------------------
+// HF CRITERIA
+
+HFCriteria::HFCriteria(string op) : ObjectCriteria("HF", op){}
+
 bool HFCriteria::evaluate(EventHandler* evt)
 { if(!evaluatated_) evaluatated_ = meetsCriteria_ = true;
   return meetsCriteria_;
 }
+
+
 
 //getCriteriaFromSelectionProfile("j%c", jsonType_);
 /*

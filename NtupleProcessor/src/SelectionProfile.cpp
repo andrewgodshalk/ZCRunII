@@ -110,6 +110,7 @@ void SelectionProfile::getObjectSplitLocations(vector<size_t>& locations)
         }
     }
   // FOLLOWING CODE REPLACED. Led to errors when object specifier letter was used in another object's specifier.
+  // Above new code checks for objects in order.
   // // Find each object in the string remaining after the previously found object.
   //   size_t searchStartingPoint = 0;  // Set equal to index after last found object string.
   //   for(size_t i=0; i<objectLabelStrs_.size(); i++)
