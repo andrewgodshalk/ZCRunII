@@ -7,16 +7,14 @@ ObjectCriteria.cpp
 */
 
 // Standard Libraries
-#include <array>
 // Project Specific classes
 #include "Logger.h"
 #include "ObjectCriteria.h"
 
-using std::array;
 using std::map;
 using std::string;
 using std::vector;
-typedef string::const_iterator str_iter;
+//typedef string::const_iterator str_iter;
 
 // Static Variables
 map<string, string> ObjectCriteria::defaultObjectProfiles_ =
@@ -39,7 +37,7 @@ ObjectCriteria::ObjectCriteria(string ot, string op)
 {   logger_.trace("ObjectCriteria() created w/ type, profile: {}, {}", ot, op); }
 
 // FACTORY FUNCTION
-ObjectCriteria* ObjectCriteria::createNew(std::string& type, std::string& specifier)
+ObjectCriteria* ObjectCriteria::createNew(string& type, string& specifier)
 { // Returns pointer to object made of with given type and specifier.
     if(type ==   "j") return (ObjectCriteria*) new     JSONCriteria(specifier);
     if(type ==   "T") return (ObjectCriteria*) new  TriggerCriteria(specifier);
@@ -76,7 +74,6 @@ JSONCriteria::JSONCriteria(string op) : ObjectCriteria( "j", op)
         default : logger_.warn("Invalid JSON type specified: {}", jsonType_);
                   jsonCheck_ = [](EventMap* em){return true           ;}; break;
     }
-    //jsonCheck = [](EventMap*){return true;};
 }
 
 bool JSONCriteria::evaluate(EventHandler* evt)
@@ -91,30 +88,89 @@ bool JSONCriteria::evaluate(EventHandler* evt)
 //------------------------------------------------------------------------------
 // TRIGGER CRITERIA
 
+// Statics
+// TRIGGER INFO: SEE https://twiki.cern.ch/twiki/bin/view/CMS/SWGuideMuonIdRun2#Muon_Trigger
+map<string, vector<string> > TriggerCriteria::triggerFullNames_
+{   { "n",  {} },
+    { "e",  { "HLT_BIT_HLT_Ele27_WPLoose_Gsf_v" }},
+    { "u",  { "HLT_BIT_HLT_IsoMu20_v",
+              "HLT_BIT_HLT_IsoTkMu20_v",
+    }       },
+    { "ee", { "HLT_BIT_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v" }},
+    { "uu", { "HLT_BIT_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v",
+              "HLT_BIT_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v",
+              "HLT_BIT_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v",
+              "HLT_BIT_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v",
+    }       },
+    { "eu", { "HLT_BIT_HLT_Mu17_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v",
+              "HLT_BIT_HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL_v",
+    }       },
+};
+map<string, vector<string> > TriggerCriteria::triggerComposite_
+{   { "n" , {}         },
+    { "e" , {"e"}      },
+    { "u" , {"u"}      },
+    { "l" , {"e","u"}  },
+    { "ee", {"ee"}     },
+    { "uu", {"uu"}     },
+    { "eu", {"eu"}     },
+    { "ll", {"ee","uu"}},
+};
+// const map<string, bool (*)(EventMap*)      > TriggerCriteria::triggerFuncs_
+// {   { "ee",
+// { "uu",
+// { "ll",
+// }
+
 TriggerCriteria::TriggerCriteria(string op) : ObjectCriteria("T", op)
 {   logger_.trace("TriggerCriteria() created w/ profile: {}", op);
+
   // Get Trigger setting from strings. String breakdown: T[ll]
   // Only one input, so just set to default if empty.
     fullSpecStr_ = specStr_.empty() ? defaultObjectProfiles_["T"] : specStr_;
+
   // Set type to whatever follows the first character
-    trigger_ = fullSpecStr_.substr(1);
-    logger_.trace("TriggerCriteria() trigger set to : {}", trigger_);
+    triggerAbbrev_ = fullSpecStr_.substr(1);
+    logger_.trace("TriggerCriteria() trigger set to : {}", triggerAbbrev_);
+
+  // Set up triggers to check each event.
+    for(const auto& trig : triggerComposite_[triggerAbbrev_])
+    {   logger_.trace("TriggerCriteria(): Pure trigger set up : {}", trig);
+        evtTriggered_[trig] = false;
+    }
 }
 
 bool TriggerCriteria::evaluate(EventHandler* evt)
-{ if(evaluatated_) return meetsCriteria_;
-  else if(trigger_ == "n")  meetsCriteria_ = true;
-  else if(trigger_ == "e")  meetsCriteria_ = false;
-  else if(trigger_ == "u")  meetsCriteria_ = false;
-  else if(trigger_ == "l")  meetsCriteria_ = false;
-  else if(trigger_ == "ee") meetsCriteria_ = evt->evtMap_->HLT_BIT_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v;
-  else if(trigger_ == "eu") meetsCriteria_ = false;
-  else if(trigger_ == "uu") meetsCriteria_ = evt->evtMap_->HLT_BIT_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v + evt->evtMap_->HLT_BIT_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v;
-  else if(trigger_ == "ll") meetsCriteria_ =   evt->evtMap_->HLT_BIT_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v
-                                            + evt->evtMap_->HLT_BIT_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v
-                                            + evt->evtMap_->HLT_BIT_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v;
-  evaluatated_ = true;
-  return meetsCriteria_;
+{   if(evaluatated_) return meetsCriteria_;
+  // Check every trig channel in the list of event triggers
+    for(auto& channel : evtTriggered_)   // i.e. "ee" and "uu" when checking "ll"
+    { // Check the individual triggers for this trigger channel
+        for(const auto& trigName : triggerFullNames_[channel.first])    // i.e. multiple HLT names for "uu"
+            channel.second = channel.second || evt->evtMap_->trigger[trigName];
+      // Set the full event variable.
+        meetsCriteria_ = meetsCriteria_ || channel.second;
+    }
+  // Return results
+    evaluatated_ = true;
+    return meetsCriteria_;
+
+  //// ???????????
+  //   NEED TO THINK ABOUT THIS - HE, EH might need to know about which trigger is active (for SF reasons is the main reason that comes to mind.)
+  //   Thus, should EH handle this?
+  //   Should SP Collection keep track of weights needed based on is OC?
+  //   How will SFs work in general?
+  //// ???????????
+
+  // ALSO TO THINK ABOUT
+  // May want to create check functions on the fly. There are a lot of references to vectors within maps within etc.
+  // There may be a more efficient way to create runtime functions using lambdas, pointers, etc.
+
+}
+
+void TriggerCriteria::reset()
+{ // Need to reset individual trigger statuses.
+    for(auto& trig : evtTriggered_) trig.second = false;
+    ObjectCriteria::reset();
 }
 
 //------------------------------------------------------------------------------

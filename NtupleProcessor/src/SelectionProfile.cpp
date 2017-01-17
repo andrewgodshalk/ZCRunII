@@ -23,15 +23,6 @@ using std::string;
 using std::vector;
 typedef pair<size_t, size_t> str_rng;
 
-//------------------------------------------------------------------------------
-// FREE FUNCTIONS
-
-// startsWith() - Checks if the big string starts with the little string.
-bool startsWith(const string& bigStr, const string& lilStr)
-{
-    bigStr.compare(0, lilStr.length(), lilStr);
-}
-
 
 //------------------------------------------------------------------------------
 // STATIC MEMBERS

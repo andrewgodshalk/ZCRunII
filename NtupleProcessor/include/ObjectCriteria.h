@@ -12,6 +12,7 @@
 ------------------------------------------------------------------------------*/
 
 // Standard Libraries
+#include <map>
 #include <string>
 #include <vector>
 // Project Specific classes
@@ -88,14 +89,17 @@ class TriggerCriteria : protected ObjectCriteria
     TriggerCriteria(std::string op="");
     ~TriggerCriteria(){}
     bool evaluate(EventHandler* evt=NULL);
+    void reset();
 
-  // Criteria Variables.
-    std::string trigger_;
+  // Static Trigger Criteria Lists
+    static std::map<std::string, std::vector<std::string> > triggerFullNames_;  // List of trigger names represented by the abbreviations.
+    static std::map<std::string, std::vector<std::string> > triggerComposite_;  // Full name of triggers
 
-  // Evaulation subfunctions. - List of function pointers for each JSON case.
-    // static std::map<char, bool (*)(EventMap*)> jsonCheckFunctions;
-    // bool (*jsonCheck_)(EventMap*);  // Function that is selected by constructor to be checked based on input.
+  // Per-Event Variables
+    std::string triggerAbbrev_;              // String specifier.
+    std::map<std::string, bool> evtTriggered_;  // Trigger results per event.
 };
+
 
 class DileptonCriteria : protected ObjectCriteria
 {

@@ -35,6 +35,7 @@
 ------------------------------------------------------------------------------*/
 
 // Standard Libraries
+#include <map>
 #include <string>
 #include <vector>
 // Root Classes
@@ -61,9 +62,9 @@ struct EventMap
     Float_t V_eta ;
     Float_t V_phi ;
     Float_t V_mass;
-    Int_t   HLT_BIT_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v;
-    Int_t   HLT_BIT_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v         ;
-    Int_t   HLT_BIT_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v       ;
+    // Int_t   HLT_BIT_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v;
+    // Int_t   HLT_BIT_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v         ;
+    // Int_t   HLT_BIT_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v       ;
     Float_t met_pt     ;
     Float_t met_phi    ;
     Float_t met_sumEt  ;
@@ -80,6 +81,9 @@ struct EventMap
     Int_t   Jet_mcFlavour[maxNumJets_];
     Float_t Jet_btagCSV  [maxNumJets_];
     Float_t Jet_vtxMass  [maxNumJets_];
+
+    std::map<std::string, Int_t> trigger;
+
 
   private:
     Logger logger_;
