@@ -12,6 +12,20 @@ Project created from template by [Hiltmon][Simple C++ Project Structure].
 
 ## Installation Instructions
 
+Fetch submodules:
+
+    cd ~/.vim
+    git submodule init
+    git submodule update
+
+Upgrading all bundled plugins: 
+
+    git submodule foreach git pull origin master
+
+Make all software from head directory.
+
+    make
+
 ### Requirements
 
 Compilation requires:
